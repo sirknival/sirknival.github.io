@@ -70,30 +70,6 @@ var cathegory_types = ["tent", "house", "mixed", "jamboree", "jamborette"]
 var layer_list = [campside_yard, campside_house, campside_mixed, campsite_jamboree, campsite_jamborette];
 var icon_list = [icon_campside, icon_house, icon_mixed, icon_jamboree, icon_jamborette];
 
-/*
-//Sets all makers on the corresponding layers
-var entry_id = 1;
-for (elem in list_places) {
-	var index = cathegory_types.indexOf(list_places[elem].cathegory);
-	list_places[elem].id = entry_id;
-
-	L.marker([list_places[elem].coords.lat, list_places[elem].coords.lng],
-		{ icon: icon_list[index], alt: entry_id })
-		.bindPopup(list_places[elem].name)
-		.on('mouseover', function (e) { this.openPopup(); })
-		.on('mouseout', function (e) { this.closePopup(); })
-		.on('click', function (e) { updateSidebar(this._icon.alt, 1, 1); }) //this._popup._content//replace by this.sourcetarget.options.alt
-		.addTo(layer_list[index]);
-	entry_id++;
-}*/
-
-/* Example for filter
-
-// filter function, change from "parking" to "stadium", to show only one marker on the map
-function soffParkingFilter(feature, layer) {
-  if(feature.properties.parking === "parking") return true;
-}
-*/
 
 function selectBasedOnCathegory(feature, list){
 	return list[cathegory_types.indexOf(feature.properties.cathegory)];
@@ -102,8 +78,10 @@ function selectBasedOnCathegory(feature, list){
 function onEachFeature(feature, layer) {
 	layer.bindPopup(feature.properties.name);
 	layer.on('mouseover', function (e) { this.openPopup(); });
+	layer.on('mouseover', highlightFeature);
+	layer.on('mouseout', resetHighlight);
 	layer.on('mouseout', function (e) { this.closePopup(); });
-	layer.on('click', function (e) { updateSidebar(feature.properties.id, 1, 1); });
+	
 	layer.addTo(selectBasedOnCathegory(feature, layer_list));
 }
 
@@ -172,16 +150,6 @@ L.control.scale({
 	imperial: false,
 }).addTo(campsides_map);
 
-//Create and add measure controls
-L.control.measure({
-	position: 'topright',
-	activeColor: '#fc5e03',
-	completedColor: '#fc0303',
-	primaryLengthUnit: 'meters',
-	secondaryLengthUnit: 'kilometers',
-	primaryAreaUnit: 'sqmeters',
-	secondaryAreaUnit: undefined
-}).addTo(campsides_map);
 
 //Add home button
 L.easyButton('fas fa-home', function (btn, map) {
@@ -190,214 +158,60 @@ L.easyButton('fas fa-home', function (btn, map) {
 	position: 'topright'
 }).addTo(campsides_map);
 
-//Create and add left sidebar
-var lft_sidebar = L.control.sidebar('sidebar', {
-	position: 'left'
+//Add infobox about campsides
+var info = L.control({
+	position: 'topleft'
 });
-lft_sidebar.addTo(campsides_map);
 
-/***********************
- * SETUP FUSEJS SEARCH *
- ***********************/
-
-//Define options for fuse search
-var options = {
-	isCaseSensitive: false,
-	includeScore: true,
-	shouldSort: true,
-	findAllMatches: true,
-	minMatchCharLength: 3,
-	threshold: 0.5,
-	keys: ["properties.name", "properties.tag", "properties.postalcode", "properties.state", "properties.country"]
+info.onAdd = function (map) {
+    this._div = L.DomUtil.create('div', 'info'); // create a div with a class "info"
+    this.update();
+    return this._div;
 };
 
-//Init fuse search
-var fuse = new Fuse(geojsonFeature, options);
+// method that we will use to update the control based on feature properties passed
+info.update = function (props) {
+    this._div.innerHTML = '<h4>Infos zu dem Lagerplatz</h4>' +  (props ?
+        '<b class="name">' + props.name + '</b><br /><p>' + formatContent(props.content)  : 'Wähle eine Ort aus</p>');
+};
 
-/*****************************
- * LEAFLETJS RELVATED EVENTS *
- *****************************/
+function formatContent(allContent) {
+	var content = "";
+	if(allContent.length > 1){
+		for(let i = 0; i < allContent.length; i++){
+			content += allContent[i];
+			content += '</p><p>'
+		}
+	}
+	else content = allContent;
+	return content;
+}
 
-//Add pan effect to map in case left sidebar is opened
-lft_sidebar.on('opening', function () {
-	campsides_map.panBy([-200, 0], { duration: 0.5 });
+info.addTo(campsides_map);
+
+
+//Add 19er Branding to Map
+var branding = L.control({
+	position: 'bottomright'
 });
-//Add pan effect to map in case left sidebar is closed
-lft_sidebar.on('closing', function () {
-	campsides_map.panBy([200, 0], { duration: 0.5 });
-});
 
-/********************
- * CUSTOM FUNCTIONS *
- ********************/
-//Global variables for map
-var cur_camp_url = "";
-var poiCounter = 1;
+branding.onAdd = function (map) {
+    var div = L.DomUtil.create('div', 'logo'); // create a div with a class "info"
+    div.innerHTML = '<img src="19er_logo.png"  width="88" height="49"> ';
+	return div;
+};
+
+branding.addTo(campsides_map);
 
 
-//@function updateSidebar (String cs_name, Int prev_state{0,1}, Int opensidebar{0,1})
-//Update Sidebar after marker onclick-event 
-function updateSidebar(index, prev_state, opensidebar) {
-	var cur_entry = geojsonFeature[--index];
-	var lat = cur_entry.geometry.coordinates[1];
-	var lng = cur_entry.geometry.coordinates[0];
-	if (opensidebar == 1) {
-		if (prev_state == 0)
-			campsides_map.flyTo([lat, lng], 12, { duration: 2 });
-		lft_sidebar.open('home');
-	}
-	cur_entry = cur_entry.properties;
-	document.getElementById("campside_name").innerHTML = cur_entry.name;
-	document.getElementById("campside_desc").innerHTML = cur_entry.desc;
-	cur_camp_url = cur_entry.website;
-	document.getElementById("campside_addr").innerHTML = "<i class=\"fas fa-home\"></i> " + cur_entry.addr;
-	document.getElementById("campside_addr2").innerHTML = "&nbsp; &nbsp; &nbsp;" + cur_entry.postalcode;
-	document.getElementById("campside_addr3").innerHTML = "&nbsp; &nbsp; &nbsp;" + cur_entry.state + " - " + cur_entry.country;
-	document.getElementById("campside_koords").innerHTML = "<i class=\"fas fa-map-marker-alt\"></i> " + lat + " " + lng;
-	document.getElementById("campside_img").src = "./img-entries/" + cur_entry.imgsrc;
-	var tag_array = cur_entry.tag.trim().split(",");
-	var tag_str = "<i class=\"fas fa-hashtag\"></i> ";
-	for (tag in tag_array) {
-		tag_str += "<span class=\"tag_link\" onclick=\"openTagInSearch(this.innerHTML)\" >" + tag_array[tag] + "</span>, ";
-	}
-	document.getElementById("campside_tags").innerHTML = tag_str.substring(0, tag_str.length - 2);
-
-}
-//@function openTagInSearch(String tag)
-//Opens the search and displays the results for the given tag
-function openTagInSearch(tag) {
-	lft_sidebar.open('search');
-	document.getElementById("globalsarch").value = tag;
-	updateSearch(tag);
-
+/**************************************
+ * SETUP MAP AND MAP CONTROL ELEMENTS *
+ **************************************/
+function highlightFeature(e) {
+    info.update(e.target.feature.properties);
+	e.target.bringToFront();
 }
 
-//@function openInMaps()
-//Open a new tab with Google Maps pointing towards the coords of the current location 
-function openInMaps() {
-	var coords_cur = document.getElementById("campside_koords").innerHTML;
-
-	coords_cur = coords_cur.split(" ");
-	window.open("https://www.google.com/maps/place/" + coords_cur[0] + "\°N" + coords_cur[1] + "\°E", '_blank');
-}
-
-//@function openInMaps()
-//Open a new tab with the website of the current location, current website_url is stored in global variable
-function openWebsite() {
-	window.open(cur_camp_url, '_blank');
-}
-
-//@function updateSearch (String term)
-//Updates the search results after every new input char
-function updateSearch(term) {
-	var answer = "";
-	var results = fuse.search(term)
-	for (i in results) {
-		answer = answer + "<p id=\"" + results[i].item.properties.id + "\" class=\"searchResult\" onclick=\"updateSidebar(this.id,0, 1)\" >" + results[i].item.properties.name + "</p> ";
-	}
-	document.getElementById("search_results").innerHTML = answer;
-}
-
-//@function searchRadius()
-//Creates/removes draggable search radius and marker on map
-function searchRadius() {
-	var radius_des = document.getElementById("search-radius").value * 1000;
-
-	if (marker_circles.getLayers() == 0) {
-
-		var circle = L.circle(campsides_map.getCenter(), {
-			color: 'gray',
-			draggable: true,
-			autoPan: true,
-			fillOpacity: 0.5,
-			radius: radius_des
-		}).addTo(marker_circles);
-
-		var circle_center = L.marker(campsides_map.getCenter(), {
-			draggable: true,
-			icon: icon_circle
-		}).on('move', function (e) { circle.setLatLng(e.latlng); })
-			.addTo(marker_circles);
-		document.getElementById("search-status").value = "Ursprung entfernen";
-	}
-	else {
-		document.getElementById("search-status").value = "Ursprung setzen";
-		marker_circles.clearLayers();
-	}
-}
-
-//function setSearchRadius(number radius)
-//Changes the current search radius
-function setSearchRadius(radius) {
-	marker_circles.getLayers()[0].setRadius(radius * 1000);
-}
-
-//function setPoi()
-// Creates a new point of intererst
-function setPoi() {
-
-	var labelTxt = document.getElementById("label_new_poi").value;
-	if (labelTxt == "")
-		labelTxt = "POI " + poiCounter;
-	var poi = L.marker(campsides_map.getCenter(), {
-		draggable: true,
-		autoPan: true,
-		icon: icon_poi
-	}).bindPopup(labelTxt)
-		.on('mouseover', function (e) { this.openPopup(); })
-		.on('mouseout', function (e) { this.closePopup(); })
-		.on('dblclick', function (e) { this.remove(); })
-		.addTo(marker_poi);
-	poiCounter++;
-}
-
-//function deleteAllPoi()
-//Clears layer with point of interests
-function deleteAllPoi() {
-	marker_poi.clearLayers();
-	poiCounter = 1;
-
-}
-
-//function updateStateHighlight(String state)
-//Updates the geoJSON layer and changes the desired overlay. Options: none, all states, single states
-function updateStateHighlight(state) {
-	geoJSONLayer.clearLayers();
-	var states_codes = ["vab", "trl", "vie", "ooe", "noe", "stm", "sbg", "ktn", "bgl"];
-	if (state != "all") {
-		var index = states_codes.indexOf(state);
-		geoJSONLayer.addData(state_geojson.features[index]);
-	}
-
-}
-
-//function submitFeedback()
-//Sends the given data from the contact field to the thingsspeak-apí
-function submitFeedback() {
-	var feedback = document.getElementById("feedback_text").value;
-	var contact = document.getElementById("feedback_contact").value;
-	var url = "https://api.thingspeak.com/update";
-	var apikey = "ICV74V58AY76KFGF";
-	var data = "apikey=" + apikey + "&field1=" + feedback + "&field2=" + contact;
-
-	var xhr = new XMLHttpRequest();
-	xhr.open("POST", url, true);
-	xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-	xhr.send(data);
-
-	lft_sidebar.close();
-	document.getElementById("feedback_text").value = "";
-	document.getElementById("feedback_contact").value = "";
-
-	alert("Abgesendet!");
-
-}
-
-function exportDesiredDatapoints() {
-	//Exports the desired datapoint as PDF
-	//STUB
-	//function exportDesiredDatapoints() {
-	var pdf = new jsPDF('p', 'pt', 'letter');
-
-	pdf.save('test.pdf');
+function resetHighlight(e) {
+    info.update();
 }

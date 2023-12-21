@@ -58,68 +58,6 @@ textarea.text_input {
   background-color: #EEE;
 }
 
-/*******************
- * OVERLAY STARTUP *
- *******************/
-/*Gray overlay background*/
-#overlay_bg {
-  z-index: 2001;
-  position: fixed;
-  width: 100%;
-  height: 100%;
-  background-color: #111;
-  opacity: 0.5;
-  visibility: hidden;
-}
-
-/*Container for overlay content*/
-#overlay_content {
-  z-index: 2002;
-  position: fixed;
-  width: 70%;
-  overflow-y: auto;
-  margin: 5% 15% 5% 15%;
-  background-color: #FFF;
-  text-align: center;
-  visibility: hidden;
-}
-
-/*Container for spacing overlay content*/
-#overlay_content div {
-  margin: 2% 10% 5% 10%;
-}
-
-/*Open Scout Map Title*/
-#overlay_content h1 {
-  letter-spacing: -0.075em;
-  color: var(--color_main);
-  font-variant: small-caps;
-  text-transform: capitalize;
-}
-
-/*List for icon explaining*/
-#overlay_content ul {
-  width: 100%;
-  padding-left: 0;
-  list-style: none;
-  list-style-position: outside;
-  text-align: left;
-  line-height: 200%;
-}
-
-/*FA icons*/
-#overlay_content i {
-  color: var(--color_main);
-}
-
-/*Button for escaping from startup overlay */
-#overlay_content input.button {
-  display: block;
-  width: 35%;
-  margin: auto;
-  margin-top: 2%;
-  margin-bottom: 2%;
-}
 
 /***************
  * MAP STYLING *
@@ -130,135 +68,35 @@ textarea.text_input {
   height: 100%;
 }
 
-/*******************
- * SIDE BAR COLORS *
- *******************/
-.sidebar-header {
-  background-color: var(--color_main);
-}
-
-#sidebar {
-  background-color: #f88c00;
-}
-
-.sidebar-tabs>li.active,
-.sidebar-tabs>ul>li.active {
-  background-color: var(--color_main);
-}
-
-/****************
- * HOMEMENU TAB *
- ****************/
- #home ul {
-  list-style: none;
-  list-style-position: outside;
-  text-align: left;
- }
-
- #campside_img {
-  width: 50%;
-  margin: 0 25% 0 25%;
-}
-
-.tag_link {
-  color: #043069;
-  font-style: italic;
-}
-
-.tag_link:hover {
-  font-weight: 600;
-}
-
-/**************
- * SEARCH TAB *
- **************/
-p.searchResult {
-  margin-left: 2%;
-  transition-duration: 0.5s;
-}
-
-p.searchResult:hover {
-  background-color: var(--color_main);
-  color: #FFF;
-  padding: 2%;
-  margin-left: 4%;
-  transition-duration: 0.5s;
-  border-radius: 5px;
-  font-weight: bold;
-
-}
-
-/**************
- * Export TAB *
- **************/
-  #export label.chkbx {
-  display: block;
-}
-
-/**************
- * ACCOUNT TAB *
+/***************
+ * INFO Overlay *
  ***************/
-#account input.button {
-  min-width: 100px;
+.info {
+  padding: 6px 8px;
+  font: 14px/16px Arial, Helvetica, sans-serif;
+  background: white;
+  background: rgba(255,255,255,0.9);
+  box-shadow: 0 0 15px rgba(0,0,0,0.2);
+  border-radius: 5px;
+  border-color: #b9b2b2;
+  border-style: solid;
 }
-
-/**************
- * SCOTTY TAB *
- **************/
-#scotty iframe {
-  width: 100%;
-  margin-top: 2%;
-  height: 350px;
-}
-
-/************
- * HELP TAB *
- ************/
-
-#help figure {
-  width: 50%;
-  margin: auto;
-  margin-top: 10%;
-}
-
-#help img {
-  width: 50%;
-  margin: 0 25% 0 25%;
-}
-
-#help figcaption {
+.info h4 {
+  margin: 0 0 20px;
+  font-size: 20px;
+  color: #9D2632;
   text-align: center;
 }
-
-
-/***************
- * CONTACT TAB *
- ***************/
-
-
-/************
- * ABOUT TAB *
- *************/
-#about a {
-  text-decoration: none;
-  color: var(--color_main);
+.info .name {
+  color: #4D4F5A;
+  font-size: 16px;
+}
+.info p {
+  margin-top: 5px;
+  margin-bottom: 0px;
 }
 
-#about a:hover {
-  color: var(--color_accent);
-}
 
-/***************
- * SETTINGS TAB *
- ***************/
-.wheel {
-  margin: auto;
-  width: 200px;
-}
-
-input.button {
-  margin-top: 5%;
-}
 
 /****************
  * MEDIA QUERYS *
@@ -283,79 +121,3 @@ input.button {
   }
 
 }
-
-/*Autorotate Screen
-
-@media (orientation: landscape) {
-  #m_ls_warn {
-  visibility: visible !important;
-  }
-}
-*/
-
-/*Mobile rotation(landscape) warning*/
-/*
-#m_ls_warn {
-  visibility: hidden;
-  z-index: 5000;
-  position:  fixed; 
-  float: left;  
-  height: 100%;
-  width: 100%;
-  font-size: 30px;
-  text-align: center;
-  background-color: var(--color_main); 
-  color: #FFF;
-  padding-top:15%;
-}
-
-/*Train & Contribute section- reference link & contact form hint*/
-/*
-span.hint {
-  font-size: 0.65em;
-}
-
-/*Train & Contribute section - reference link & contact form hint*/
-/*
-.hint a  {
-  text-decoration: none;
-  color: var(--color_main);
-}
-/*Train & Contribute section - reference link & contact form hint*/
-/*/*
-.hint a:hover  {
-  color: var(--color_accent);
-}
-
-
-/*Autorotate Screen
-
-@media (orientation: landscape) {
-  #m_ls_warn {
-  visibility: visible !important;
-  }
-}
-*/
-/*
-
-LEGACY CODE - RENEWED CODE ABOVE
-p.searchResult {
-  padding-top: 1em;
-  padding-bottom: 1em;
-}
-
-p.searchResult:hover {
-  background-color: green;
-  padding-left: 2em;
-  border-radius: 5px;
-  color: #FFF;
-  font-weight: bold; 
-  animation-duration: 0.2s;
-  animation-name: search_highlight;
-}
-
-@keyframes search_highlight {
-  from {padding-left: 0em;}
-  to {padding-left: 2em;}
-}
-*/
