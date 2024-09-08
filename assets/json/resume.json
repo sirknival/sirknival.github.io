@@ -19,12 +19,35 @@
       }
     ]
   },
+  "education": [
+    {
+      "institution": "Technical University Vienna",
+      "location": "Vienna, Austria",
+      "url": "https://www.tuwien.at/",
+      "area": "Electrical Engineering",
+      "studyType": "BSc",
+      "startDate": "10.2020",
+      "endDate": "now",
+      "score": "10",
+      "courses": [""]
+    },
+    {
+      "institution": "HTL Wien West (formerly HTL Ottakring)",
+      "location": "Vienna, Austria",
+      "url": "https://www.htlwienwest.at",
+      "area": "Electrical Engineering",
+      "studyType": "Matura",
+      "startDate": "09.2014",
+      "endDate": "06.2020",
+      "score": "10"
+    }
+  ],
   "work": [
     {
       "name": "Wiener Pfadfinderinnen und Pfadfinder",
       "position": "Assistant to the regional association",
       "url": "https://wpp.at",
-      "startDate": "08.2022",
+      "startDate": "08.2002",
       "endDate": "now",
       "summary": "Teaching at Palmer Physical Laboratory (now 302 Frist Campus Center). While not a professor at Princeton, I associated with the physics professors and continued to give lectures on campus.",
       "highlights": ["Public relations", "IT administration (MS 365, Intranet, Web presence, ...", "First-level support for Vienese scout groups", "Administration of the internal training"]
@@ -50,11 +73,11 @@
     {
       "organization": "Wiener Pfadfinderinnen und Pfadfinder",
       "location": "Vienna, Austria",
-      "position": "Head of department",
+      "position": "Head of department LAB 2024",
       "startDate": "04.2023",
       "endDate": "06.2024",
       "summary": "Landesabenteuer (LAB) 2024. Vienese scout camp with over 270 boy scouts and girl guides.",
-      "highlights": ["Public Relations", "Finances", "Administration"]
+      "highlights": ["Public relations", "Finances", "Administration"]
     },
     {
       "organization": "Pfadfindergruppe 19 Breitensee",
@@ -66,29 +89,7 @@
       "highlights": ["Wichtel & W&ouml;lfinge", "Guides & Späher"]
     }
   ],
-  "education": [
-    {
-      "institution": "Technical University Vienna",
-      "location": "Vienna, Austria",
-      "url": "https://www.tuwien.at/",
-      "area": "Electrical Engineering",
-      "studyType": "BSc",
-      "startDate": "10.2020",
-      "endDate": "now",
-      "score": "10",
-      "courses": [""]
-    },
-    {
-      "institution": "HTL Wien West (formerly HTL Ottakring)",
-      "location": "Vienna, Austria",
-      "url": "https://www.htlwienwest.at",
-      "area": "Electrical Engineering",
-      "studyType": "Matura",
-      "startDate": "09.2014",
-      "endDate": "06.2020",
-      "score": "10"
-    }
-  ],
+  
   "awards": [
     {
       "title": "Leistungsstipendium",
