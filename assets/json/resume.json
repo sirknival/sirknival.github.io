@@ -21,6 +21,7 @@
   },
   "education": [
     {
+      "icon": "fa-solid fa-hashtag",
       "institution": "Technical University Vienna",
       "location": "Vienna, Austria",
       "url": "https://www.tuwien.at/",
@@ -47,9 +48,9 @@
       "name": "Wiener Pfadfinderinnen und Pfadfinder",
       "position": "Assistant to the regional association",
       "url": "https://wpp.at",
-      "startDate": "08.2002",
+      "startDate": "08.2022",
       "endDate": "now",
-      "summary": "Teaching at Palmer Physical Laboratory (now 302 Frist Campus Center). While not a professor at Princeton, I associated with the physics professors and continued to give lectures on campus.",
+      "summary": "Full-time employee - support of the volunteer officials.",
       "highlights": ["Public relations", "IT administration (MS 365, Intranet, Web presence, ...", "First-level support for Vienese scout groups", "Administration of the internal training"]
     },
     {
