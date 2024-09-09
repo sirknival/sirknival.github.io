@@ -27,7 +27,7 @@
       "url": "https://www.tuwien.at/",
       "area": "Electrical Engineering",
       "studyType": "BSc",
-      "startDate": "10.2020",
+      "startDate": "2020-10",
       "endDate": "now",
       "score": "10",
       "courses": [""]
@@ -38,8 +38,8 @@
       "url": "https://www.htlwienwest.at",
       "area": "Electrical Engineering",
       "studyType": "Matura",
-      "startDate": "09.2014",
-      "endDate": "06.2020",
+      "startDate": "2014-09",
+      "endDate": "2020-06",
       "score": "10"
     }
   ],
@@ -48,7 +48,7 @@
       "name": "Wiener Pfadfinderinnen und Pfadfinder",
       "position": "Assistant to the regional association",
       "url": "https://wpp.at",
-      "startDate": "08.2022",
+      "startDate": "2022-08",
       "endDate": "now",
       "summary": "Full-time employee - support of the volunteer officials.",
       "highlights": ["Public relations", "IT administration (MS 365, Intranet, Web presence, ...", "First-level support for Vienese scout groups", "Administration of the internal training"]
@@ -57,8 +57,8 @@
       "name": "Kamo Elektrotechnik GmbH",
       "position": "Technical Drafter",
       "url": "https://kamo-elektrotechnik.at/",
-      "startDate": "11.2021",
-      "endDate": "07.2022",
+      "startDate": "2021-11",
+      "endDate": "2022-07",
       "summary": ""
     }
   ],
@@ -67,7 +67,7 @@
       "organization": "Pfadfindergruppe 19 Breitensee",
       "location": "Vienna, Austria",
       "position": "Group Leader",
-      "startDate": "08.2023",
+      "startDate": "2023-08",
       "endDate": "now",
       "summary": ""
     },
@@ -75,8 +75,8 @@
       "organization": "Wiener Pfadfinderinnen und Pfadfinder",
       "location": "Vienna, Austria",
       "position": "Head of department LAB 2024",
-      "startDate": "04.2023",
-      "endDate": "06.2024",
+      "startDate": "2023-04",
+      "endDate": "2024-06",
       "summary": "Landesabenteuer (LAB) 2024. Vienese scout camp with over 270 boy scouts and girl guides.",
       "highlights": ["Public relations", "Finances", "Administration"]
     },
@@ -84,7 +84,7 @@
       "organization": "Pfadfindergruppe 19 Breitensee",
       "location": "Vienna, Austria",
       "position": "Scout Leader",
-      "startDate": "10.2018",
+      "startDate": "2018-10",
       "endDate": "now",
       "summary": "",
       "highlights": ["Wichtel & W&ouml;lfinge", "Guides & Späher"]
