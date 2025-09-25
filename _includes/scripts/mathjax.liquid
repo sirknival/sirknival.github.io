@@ -4,10 +4,12 @@
     <script type="text/javascript">
       window.MathJax = {
         tex: {
-          tags: 'ams',
-        },
+          packages: ['base', 'ams'],  // 'ams' lädt amsmath, amssymb etc.
+          tags: 'ams'                 // optional: für \begin{align} Nummerierung
+        }
       };
     </script>
+
     <script
       defer
       type="text/javascript"
@@ -16,6 +18,7 @@
       integrity="{{ site.third_party_libraries.mathjax.integrity.js }}"
       crossorigin="anonymous"
     ></script>
+
     <script
       defer
       src="{{ site.third_party_libraries.polyfill.url.js }}"
