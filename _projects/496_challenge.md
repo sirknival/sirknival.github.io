@@ -37,5 +37,3 @@ But maybe on day 14 you decide to boost your weekly volume. You add 30 km to all
 <div class="caption">
     This image can also have a caption. It's like magic.
 </div>
-
-{% endraw %}
