@@ -1,18 +1,15 @@
 ---
 layout: page
 title: TransAlp
-description: Wanderung über die Alpen
+description: Hiking over the alps
 img: assets/img/transAlp_Cover.jpg
 importance: 1
 category: sports
 related_publications: false
 ---
 
-Every project has a beautiful feature showcase page.
-It's easy to include images in a flexible 3-column grid format.
-Make your photos 1/3, 2/3, or full width.
+<script type="text/javascript" src="https://www.alpenvereinaktiv.com/de/embed/324902439/js?mw=false&s=m"></script>
 
-To give your project a background in the portfolio page, just add the img tag to the front matter like so:
 
     ---
     layout: page
@@ -60,22 +57,37 @@ You describe how you toiled, sweated, _bled_ for your project, and then... you r
     You can also have artistically styled 2/3 + 1/3 images, like these.
 </div>
 
-The code is simple.
-Just wrap your images with `<div class="col-sm">` and place them inside `<div class="row">` (read more about the <a href="https://getbootstrap.com/docs/4.4/layout/grid/">Bootstrap Grid</a> system).
-To make images responsive, add `img-fluid` class to each; for rounded corners and shadows use `rounded` and `z-depth-1` classes.
-Here's the code for the last row of images above:
 
-{% raw %}
+Unterkünfte/Huts
 
-```html
-<div class="row justify-content-sm-center">
-  <div class="col-sm-8 mt-3 mt-md-0">
-    {% include figure.liquid path="assets/img/6.jpg" title="example image" class="img-fluid rounded z-depth-1" %}
-  </div>
-  <div class="col-sm-4 mt-3 mt-md-0">
-    {% include figure.liquid path="assets/img/11.jpg" title="example image" class="img-fluid rounded z-depth-1" %}
-  </div>
-</div>
-```
+🛖 21.8 Skihütte Zams
 
-{% endraw %}
+🛖 22.8 Ludwigsburger Hütte
+
+🛖 23.8 Rüsselsheimer Hütte
+
+🛖 24.8 Figls Hütte
+
+🛖 25.8 Schutzhütte Schneeberg
+
+🛖 26.8 Oberkaser Alm
+
+Abschnitte - Tagesplanungen
+
+📅Tag 1 https://www.alpenvereinaktiv.com/de/r/323646720share=%7E3ztwijua%244ossxioc&utm_source=unknown&utm_medium=social&utm_campaign=user-shared-social-content
+
+📅Tag 2 https://www.alpenvereinaktiv.com/der/323646821share=%7E3ztwzesg%244ossxioc&utm_source=unknown&utm_medium=social&utm_campaign=user-shared-social-content
+
+📅Tag 3 https://www.alpenvereinaktiv.com/de/r/323646916?share=%7E3ztw3bft%244ossxioe&utm_source=unknown&utm_medium=social&utm_campaign=user-shared-social-content
+
+📅Tag 4 https://www.alpenvereinaktiv.com/de/r/323647001?share=%7E3ztw4z9x%244ossxioy&utm_source=unknown&utm_medium=social&utm_campaign=user-shared-social-content
+
+📅Tag 5 https://www.alpenvereinaktiv.com/de/r/323647117?share=%7E3ztw4zkx%244ossxioa&utm_source=unknown&utm_medium=social&utm_campaign=user-shared-social-content
+
+📅Tag 5z https://www.alpenvereinaktiv.com/de/r/323647832?share=%7E3ztwcrbt%244ossxiof&utm_source=unknown&utm_medium=social&utm_campaign=user-shared-social-content
+
+📅Tag 6 https://www.alpenvereinaktiv.com/de/r/323647338?share=%7E3ztw7fzk%244ossxiob&utm_source=unknown&utm_medium=social&utm_campaign=user-shared-social-content
+
+📅Tag 6a https://www.alpenvereinaktiv.com/de/r/324890131?share=%7E3zyutojv%244ossdkzq&utm_source=unknown&utm_medium=social&utm_campaign=user-shared-social-content
+
+📅Tag 7 https://www.alpenvereinaktiv.com/de/r/323647491?share=%7E3ztwbykt%244ossxioc&utm_source=unknown&utm_medium=social&utm_campaign=user-shared-social-content
