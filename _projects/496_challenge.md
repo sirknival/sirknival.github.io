@@ -14,7 +14,7 @@ It’s that simple.
 
 But maybe on day 14 you decide to boost your weekly volume. You add 30 km to all daily distances up to day 5—except for days 1 and 2. Doing the challenge in a 30-day month, this means day 1 gets skipped, while day 2 grows into a 42 km run—the answer to everything.
 
-<iframe src="{{ '/assets/html/running_chart.html' | relative_url }}" frameborder='0' scrolling='no' height="500px" width="100%" style="border: 1px dashed grey;"></iframe>
+<iframe src="/assets/html/running_chart.html" frameborder='0' scrolling='no' height="500px" width="100%" style="border: 1px dashed grey;"></iframe>
 
 <div class="row">
     <div class="col-sm mt-3 mt-md-0">
