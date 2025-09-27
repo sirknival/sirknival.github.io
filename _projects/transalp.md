@@ -50,22 +50,22 @@ related_publications: false
 
 🛖 26.8 Oberkaser Alm
 
-**Abschnitte - Tagesplanungen**
+**Tourenbschnitte - Tagesplanungen**
 
-📅Tag 1 [Tour Alpenvereinaktiv](https://www.alpenvereinaktiv.com/de/r/323646720share=%7E3ztwijua%244ossxioc&utm_source=unknown&utm_medium=social&utm_campaign=user-shared-social-content)
+📅Tag 1 [Tour Alpenvereinaktiv](https://www.alpenvereinaktiv.com/de/tour/transalp-1/323646720/?share=%7E3ztwijua%244ossxioc)
 
-📅Tag 2 [Tour Alpenvereinaktiv](https://www.alpenvereinaktiv.com/der/323646821share=%7E3ztwzesg%244ossxioc&utm_source=unknown&utm_medium=social&utm_campaign=user-shared-social-content)
+📅Tag 2 [Tour Alpenvereinaktiv](https://www.alpenvereinaktiv.com/de/tour/transalp-2/323646821/?share=%7E3ztwzesg%244ossxioc)
 
-📅Tag 3 [Tour Alpenvereinaktiv]https://www.alpenvereinaktiv.com/de/r/323646916?share=%7E3ztw3bft%244ossxioe&utm_source=unknown&utm_medium=social&utm_campaign=user-shared-social-content)
+📅Tag 3 [Tour Alpenvereinaktiv](https://www.alpenvereinaktiv.com/de/tour/transalp-3/323646916/?share=%7E3ztw3bft%244ossxioe)
 
-📅Tag 4 [Tour Alpenvereinaktiv]https://www.alpenvereinaktiv.com/de/r/323647001?share=%7E3ztw4z9x%244ossxioy&utm_source=unknown&utm_medium=social&utm_campaign=user-shared-social-content)
+📅Tag 4 [Tour Alpenvereinaktiv](https://www.alpenvereinaktiv.com/de/tour/transalp-4/323647001/?share=%7E3ztw4z9x%244ossxioy)
 
-📅Tag 5 [Tour Alpenvereinaktiv](https://www.alpenvereinaktiv.com/de/r/323647117?share=%7E3ztw4zkx%244ossxioa&utm_source=unknown&utm_medium=social&utm_campaign=user-shared-social-content)
+📅Tag 5 [Tour Alpenvereinaktiv](https://www.alpenvereinaktiv.com/de/tour/transalp-5/323647117/?share=%7E3ztw4zkx%244ossxioa)
 
-📅Tag 5z [Tour Alpenvereinaktiv](https://www.alpenvereinaktiv.com/de/r/323647832?share=%7E3ztwcrbt%244ossxiof&utm_source=unknown&utm_medium=social&utm_campaign=user-shared-social-content)
+📅Tag 5z [Tour Alpenvereinaktiv](https://www.alpenvereinaktiv.com/de/tour/transalp-5z/323647832/?share=%7E3ztwcrbt%244ossxiof)
 
-📅Tag 6 [Tour Alpenvereinaktiv](https://www.alpenvereinaktiv.com/de/r/323647338?share=%7E3ztw7fzk%244ossxiob&utm_source=unknown&utm_medium=social&utm_campaign=user-shared-social-content)
+📅Tag 6 [Tour Alpenvereinaktiv](https://www.alpenvereinaktiv.com/de/tour/transalp-6/323647338/?share=%7E3ztw7fzk%244ossxiob)
 
-📅Tag 6a [Tour Alpenvereinaktiv](https://www.alpenvereinaktiv.com/de/r/324890131?share=%7E3zyutojv%244ossdkzq&utm_source=unknown&utm_medium=social&utm_campaign=user-shared-social-content)
+📅Tag 6a [Tour Alpenvereinaktiv](https://www.alpenvereinaktiv.com/de/tour/transalp-6a/324782171/?share=%7E3zypxhbp%244ossd9po)
 
-📅Tag 7 [Tour Alpenvereinaktiv](https://www.alpenvereinaktiv.com/de/r/323647491?share=%7E3ztwbykt%244ossxioc&utm_source=unknown&utm_medium=social&utm_campaign=user-shared-social-content)
+📅Tag 7 [Tour Alpenvereinaktiv](https://www.alpenvereinaktiv.com/de/tour/transalp-7/323647491/?share=%7E3ztwbykt%244ossxioc)
