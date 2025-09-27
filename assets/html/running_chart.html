@@ -2,7 +2,7 @@
 <html lang="de">
 <head>
   <meta charset="UTF-8">
-  <title>Strava-ähnliche Laufübersicht</title>
+  <title>Strava inspired running calendar</title>
   <style>
     body {
       font-family: sans-serif;
@@ -40,59 +40,66 @@
 <body>
   <h1>Laufübersicht</h1>
   <table id="runTable"></table>
+<script>
+// Beispiel-Daten: 7 Col (Wochentage), 5 Rows (Wochen)
+const data = [
+[12, 29, 35, 16, 7],
+[23, 11, 21, 25, 10],
+[30, 8, 26, 22, 0],
+[14, 28, 42, 18, 0],
+[15, 20, 24, 19, 0],
+[31, 27, 34, 17, 0],
+[9, 13, 6, 33, 0]
+];
 
-  <script>
-    // Beispiel-Daten: 7 Zeilen (Wochentage), 5 Spalten (Wochen)
-    const data = [
-      [12, 29, 35, 16, 7],
-      [23, 11, 21, 25, 10],
-      [30, 8, 26, 22, 0],
-      [14, 28, 42, 18, 0],
-      [15, 20, 24, 17, 0],
-      [31, 27, 34, 19, 0],
-      [9, 13, 6, 33, 0]
-    ];
 
-    const weekdays = ["Mo", "Di", "Mi", "Do", "Fr", "Sa", "So"];
-    const weeks = ["W1", "W2", "W3", "W4", "W5"];
+const weekdays = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
+const weeks = ["W1", "W2", "W3", "W4", "W5"];
 
-    const table = document.getElementById("runTable");
 
-    // Kopfzeile mit Wochen
-    const headerRow = document.createElement("tr");
-    headerRow.appendChild(document.createElement("th")); // leere Ecke
-    weeks.forEach(week => {
-      const th = document.createElement("th");
-      th.textContent = week;
-      headerRow.appendChild(th);
-    });
-    table.appendChild(headerRow);
+const table = document.getElementById("runTable");
 
-    // Maximalwert für Skalierung suchen
-    const maxVal = Math.max(...data.flat());
 
-    data.forEach((row, rowIndex) => {
-      const tr = document.createElement("tr");
+// Kopfzeile mit Wochentagen
+const headerRow = document.createElement("tr");
+headerRow.appendChild(document.createElement("th")); // leere Ecke
+weekdays.forEach(day => {
+const th = document.createElement("th");
+th.textContent = day;
+headerRow.appendChild(th);
+});
+table.appendChild(headerRow);
 
-      // Wochentags-Label links
-      const th = document.createElement("th");
-      th.textContent = weekdays[rowIndex];
-      tr.appendChild(th);
 
-      row.forEach(val => {
-        const td = document.createElement("td");
-        if (val > 0) {
-          const circle = document.createElement("div");
-          const radius = 20 + (val / maxVal) *45; // min 15px, max 45px
-          circle.className = "circle";
-          circle.style.width = circle.style.height = radius + "px";
-          circle.textContent = val;
-          td.appendChild(circle);
-        }
-        tr.appendChild(td);
-      });
-      table.appendChild(tr);
-    });
-  </script>
+// Maximalwert für Skalierung suchen
+const maxVal = Math.max(...data.flat());
+
+
+weeks.forEach((week, weekIndex) => {
+const tr = document.createElement("tr");
+
+
+// Wochen-Label links
+const th = document.createElement("th");
+th.textContent = week;
+tr.appendChild(th);
+
+
+weekdays.forEach((_, dayIndex) => {
+const td = document.createElement("td");
+const val = data[dayIndex][weekIndex];
+if (val > 0) {
+const circle = document.createElement("div");
+const radius = 20 + (val / maxVal) * 45; // min 20px, max 65px
+circle.className = "circle";
+circle.style.width = circle.style.height = radius + "px";
+circle.textContent = val;
+td.appendChild(circle);
+}
+tr.appendChild(td);
+});
+table.appendChild(tr);
+});
+</script>
 </body>
 </html>
