@@ -2,7 +2,7 @@
 layout: about
 title: about
 permalink: /
-subtitle: Interested in robotics, scouts, adventures, running and primarily in mountains.**Thinks in oeuvres.**
+subtitle: Interested in robotics, scouts, adventures, running and primarily in mountains. <br> <b>Thinks in oeuvres.</b>
 
 profile:
   align: right
