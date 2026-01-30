@@ -8,7 +8,7 @@ category: work
 related_publications: false
 ---
 
-# Applied Theory
+## Applied Theory
 The aim of this term paper is implementing a hierarchical impedance-based tracking controller for the kinematically redundant Franka robot arm. The robot arm has 7 DoF $$(n=7$$), which can be derived with the formula of Grübler. For implementing the controller two assumptions needed to be fulfilled. 
 
 The first assumption is that the total task dimensions $$m_i$$ match the number of DoF in the system. With this information the three hierarchical task spaces were chosen as
@@ -19,8 +19,8 @@ The first assumption is that the total task dimensions $$m_i$$ match the number 
 
 which fulfills the condition $$ \sum_{i=1}^3 m_i = n$$.
 
-
 Following the notation $$x_i^{aug}=\begin{bmatrix} x_1 &...& x_i \end{bmatrix}^T$$ with hierarchy level $$i$$, we can define the augmented state vector
+
 $$x_3^{aug}=
 \begin{bmatrix}
 p_{e,x} &
@@ -32,8 +32,10 @@ p_{e,z} &
 q_1
 \end{bmatrix}^T\text{~.}
 $$. 
+
 The second assumption is considering  a workspace which is free of kinematically and representational singularities. Furthermore, it is assumed that the initial state $$\left. x_3^{aug}  \right|_{t = 0} = x_{init, k}$$, $$k$$ indexing the vector entries, is already located on the desired trajectory. All this is fulfilled by the desired trajectory  
-\begin{align}
+
+$$
 \label{eq:des_traj}
    x_{3, des}^{aug}  =
 \begin{bmatrix}
@@ -42,54 +44,34 @@ x_{init, 2} + 0.05\, \sin(\omega t) \\
 x_{init, 3-6} \\
 x_{init, 7} + 0.4\, \sin(\omega t)\\
 \end{bmatrix} 
-\end{align}
+$$
+
 and its analytical first and second derivatives.
 
-Given the Jacobian of the end effector, we can define the Jacobians $$J_i(q)$$ for the first two tasks with $$\begin{bmatrix}
+Given the Jacobian of the end effector, we can define the Jacobians $$J_i(q)$$ for the first two tasks with 
+
+$$
+\begin{bmatrix}
     \dot{p}_e & \omega_e
-\end{bmatrix}^T = \begin{bmatrix} J_1 (q) & J_2(q) \end{bmatrix}^T \, \dot{q}$$. The Jacobian for the third task $$J_3$$ is given with $$\dot{q}_0 = J_3(q) \, \dot{q} = \begin{bmatrix} 1 & 0_{1 \times 6} \end{bmatrix} \, \dot{q}$$. This results in the augmented Jacobian with 
-\begin{equation}
-    {J}_{3}^{aug}(q) = \begin{bmatrix} J_{1}(q) & J_{2}(q) & J_{3}(q) \end{bmatrix}^T \text{~.}
-\end{equation}
+\end{bmatrix}^T = \begin{bmatrix} J_1 (q) & J_2(q) \end{bmatrix}^T \, \dot{q}$$. The Jacobian for the third task $$J_3$$ is given with $$\dot{q}_0 = J_3(q) \, \dot{q} = \begin{bmatrix} 1 & 0_{1 \times 6} \end{bmatrix} \, \dot{q}$$
 
-\begin{comment}
-The first step is computing the complete task space velocities $$v \in \mathbb{R}^n$$ in hierarchically decoupled coordinates
-\begin{equation}
-\underbrace{
-\begin{pmatrix}
-v_1 \\
-\vdots \\
-v_r
-\end{pmatrix}}_{\mathbf{v}}
-=
-\underbrace{
-\begin{pmatrix}
-\bar{J}_1(q) \\
-\vdots \\
-\bar{J}_r(q)
-\end{pmatrix}}_{\bar{J}(q)} \dot{q}.
-\end{equation}
+. This results in the augmented Jacobian with 
 
- with the null space projections $$\bar{J}_i(q) = J_i(q) N_i(q)^{T} \in \mathbb{R}^{n \times n}$$. The null space projectors $$N_i \in \mathbb{R}^{n \times n} $$are iteratively computed with 
-\begin{equation}
-    N_i(q) =
-\begin{cases}
-I, & \text{for } i = 1 \\
-I - J^{\text{aug}}_{i-1}(q)^T J^{\text{aug}}_{i-1}(q)^{M{+},T}, & \text{for } i = 2 \ldots r
-\end{cases}
-\end{equation}
+$$
+    {J}_{3}^{aug}(q) = \begin{bmatrix} J_{1}(q) & J_{2}(q) & J_{3}(q) \end{bmatrix}^T .
+$$
 
-where $$J^{\text{aug}}_{i-1}(q)^{M{+},T}$$ is the dynamically consistent pseudo inverse of $$J^{\text{aug}}_{i-1}(q)$$ weighted by $$M$$. These projections can be used to apply a coordinate transformation and obtain hierarchically decoupled equations of motion. This decouples inertial behaviour but not dynamical behaviour, and results in a new inertia matrix $$\Lambda(q)$$, as well as new Coriolis and centrifugal effects $$\mu(q, \dot{q})$$.
-\end{comment}
 With the transformation from task space velocities  $$\dot{x}_3^{aug}$$ into hierarchically decoupled velocities $$v$$ using null space projections $$\bar{J}_i(q)$$ of $${J}_{3}^{aug}(q)$$, the equation of motion in hierarchically decoupled coordinates can be derived with a new inertia matrix $$\Lambda(q)$$, as well as new Coriolis and centrifugal effects $$\mu(q, \dot{q})$$.
 
 The control law was then derived by transforming this back into the original task space. As mentioned in the paper, the control law is then as follows:
-\begin{align}
+
+$$
     \tau = g + \tau_{\mu} + \sum_{i=1}^r \bar{J}_i(q)\,F_{i,\mathrm{ctrl}}
-\end{align}
+$$
+
 with gravity compensation $$g$$, a term for task executions for each task level based on the control force $$F_{i, \mathrm{ctrl}}$$ as well as $$\tau_\mu$$ which represents the Coriolis and centrifugal forces of the coupled tasks due to the remaining coupling described above. 
 
-\begin{align}
+$$
     \tau_{\mu} 
     = \sum_{i=1}^r \Bigl(
         \overline{J}_i^T \Bigl(
@@ -97,29 +79,52 @@ with gravity compensation $$g$$, a term for task executions for each task level 
             + \sum_{j=i+1}^r \mu_{i,j}\,v_j
         \Bigr)
       \Bigr)
-\end{align}
+$$
 
-
-\begin{equation}
+$$
 \label{eq:F_i_ctrl}
     \begin{split}
         F_{i, \mathrm{ctrl}} &= \Lambda_i \ddot{x}_{i, \mathrm{des}}+\mu_{i, i} \dot{x}_{i, \mathrm{des}}-D_i \dot{\tilde{x}}_i-K_i \tilde{x}_i \\
 & +\gamma_i(q, \dot{q})\binom{\dot{x}_{i-1, \mathrm{des}}^{\text {aug }}}{\ddot{x}_{i-1, \text { des }}^{\text {aug }}}-F_{i, \text { ctrl }}^{\text {ext }}
     \end{split}
-\end{equation}. 
+$$
 
-The orientation error $$\tilde{x}_{4-6}$$ was implemented with quaternions, avoiding representation singularities. Furthermore, $$F_{i, \text { ctrl }}^{\text {ext }}$$ depends on the case in question. Case 1 describes no feedback of external forces, while case 2 uses a feedback signal compensating for them with  
-\begin{align}
+.The orientation error $$\tilde{x}_{4-6}$$ was implemented with quaternions, avoiding representation singularities. Furthermore, $$F_{i, \text { ctrl }}^{\text {ext }}$$ depends on the case in question. Case 1 describes no feedback of external forces, while case 2 uses a feedback signal compensating for them with  
+
+$$
 \label{eq:F_ext}
 F_{i, \text { ctrl }}^{\text {ext }} = \sum_{j = i + 1}^{r} \mathbf{E}_{i,j}(\mathbf{q}) \, \mathbf{F}_{\dot{x}_j}^{\text{ext}}
-\end{align}
+$$
+
 by transforming into $$v$$-space with $$E$$. Note that this has only inertially decoupled behavior, not dynamically. For non-constant forces, lower levels can still be influenced.
 ## Experiments
-For all following experiments, we chose constant parameters $$K=diag([500, 1500, 1500, 100, 40, 40, 100)$$ and $$D=diag(80, 80, 80, 20, 13, 13, 10)$$ . In the experiments, we distinguish between 3 test cases.
+For all following experiments, we chose constant parameters 
+
+$$
+K=diag([500, 1500, 1500, 100, 40, 40, 100)
+$$ 
+
+and 
+
+$$
+D=diag(80, 80, 80, 20, 13, 13, 10)
+$$ 
+
+. In the experiments, we distinguish between 3 test cases.
 
  1. Comparison of two target trajectories, where one, as described in equation \ref{eq:des_traj}, has no conflicting tasks and the other does. The conflicting trajectory is realized by changing the last task to $$x_{7} = x_{init, 7} + 2\pi\, \sin(\omega t)$$, which results in a oscillation of the first joint with two full rotations.
  2. Investigation of the influence of the $$\gamma_i(q, \dot{q})$$-term by running one simulation including the  $$\gamma_i$$-term and one without it.
  3. External forces were applied at different task levels to examine their effects on the controller in both cases, as described along with equation \ref{eq:F_ext}. In each interval the corresponding force vector part $$\mathbf{F}_{\dot{x}_j}^{\text{ext}} = \begin{bmatrix}300& 300 & 0 &60 & 0 & 0 & 100\end{bmatrix}^T$$ was applied on a different task level.
+
+
+<div class="row">
+    <div class="col-sm mt-3 mt-md-0">
+        {% include figure.liquid loading="eager" path="assets/img/hibtc/Exp_1.png" title="Figure 1" class="img-fluid rounded z-depth-1" %}
+    </div>
+</div>
+<div class="caption">
+   \textit{Experiment \#1} Comparison of conflicting (dashed) and non-conflicting (solid) desired trajectories}
+</div>
 
 \begin{figure} [h!]
     \centering
