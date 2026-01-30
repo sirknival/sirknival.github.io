@@ -40,7 +40,7 @@ $$
 
 , $$k$$ indexing the vector entries, is already located on the desired trajectory. All this is fulfilled by the desired trajectory  
 
-$$
+\begin{equation}
 \label{eq:des_traj}
    x_{3, des}^{aug}  =
 \begin{bmatrix}
@@ -49,7 +49,7 @@ x_{init, 2} + 0.05\, \sin(\omega t) \\
 x_{init, 3-6} \\
 x_{init, 7} + 0.4\, \sin(\omega t)\\
 \end{bmatrix} 
-$$
+\begin{equation}
 
 and its analytical first and second derivatives.
 
@@ -109,6 +109,7 @@ F_{i, \text { ctrl }}^{\text {ext }} = \sum_{j = i + 1}^{r} \mathbf{E}_{i,j}(\ma
 $$
 
 by transforming into $$v$$-space with $$E$$. Note that this has only inertially decoupled behavior, not dynamically. For non-constant forces, lower levels can still be influenced.
+
 ## Experiments
 For all following experiments, we chose constant parameters 
 
@@ -119,10 +120,10 @@ $$
 and 
 
 $$
-D=diag(80, 80, 80, 20, 13, 13, 10)
+D=diag(80, 80, 80, 20, 13, 13, 10) .
 $$ 
 
-. In the experiments, we distinguish between 3 test cases.
+In the experiments, we distinguish between 3 test cases.
 
  1. Comparison of two target trajectories, where one, as described in equation \ref{eq:des_traj}, has no conflicting tasks and the other does. The conflicting trajectory is realized by changing the last task to $$x_{7} = x_{init, 7} + 2\pi\, \sin(\omega t)$$, which results in a oscillation of the first joint with two full rotations.
  2. Investigation of the influence of the $$\gamma_i(q, \dot{q})$$-term by running one simulation including the  $$\gamma_i$$-term and one without it.
