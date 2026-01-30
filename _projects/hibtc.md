@@ -21,7 +21,8 @@ which fulfills the condition $$ \sum_{i=1}^3 m_i = n$$.
 
 Following the notation $$x_i^{aug}=\begin{bmatrix} x_1 &...& x_i \end{bmatrix}^T$$ with hierarchy level $$i$$, we can define the augmented state vector
 
-$$x_3^{aug}=
+$$
+x_3^{aug}=
 \begin{bmatrix}
 p_{e,x} &
 p_{e,y} &
@@ -30,17 +31,18 @@ p_{e,z} &
 \phi_{e,y} &
 \phi_{e,z} &
 q_1
-\end{bmatrix}^T
-$$. 
+\end{bmatrix}^T .
+$$
 
 The second assumption is considering  a workspace which is free of kinematically and representational singularities. Furthermore, it is assumed that the initial state 
+
 $$
 \left. x_3^{aug}  \right|_{t = 0} = x_{init, k}
 $$
 
 , $$k$$ indexing the vector entries, is already located on the desired trajectory. All this is fulfilled by the desired trajectory  
 
-\begin{equation}
+$$
 \label{eq:des_traj}
    x_{3, des}^{aug}  =
 \begin{bmatrix}
@@ -49,7 +51,7 @@ x_{init, 2} + 0.05\, \sin(\omega t) \\
 x_{init, 3-6} \\
 x_{init, 7} + 0.4\, \sin(\omega t)\\
 \end{bmatrix} 
-\begin{equation}
+$$
 
 and its analytical first and second derivatives.
 
@@ -142,9 +144,7 @@ In the experiments, we distinguish between 3 test cases.
     </div>
 </div>
 <div class="caption">
-   Experiment plot 1 (left): Comparison of conflicting (dashed) and non-conflicting (solid) desired trajectories,
-   Experiment plot 2 (middle): Comparison of w. and w/o compensating for top-down disturbances through the $$\gamma_i(q, \dot{q})$$-term
-   Experiment plot 2 (right): Comparison of energy levels case 1: w/o feedback of forces/torques, case 2: w. feedback of forces/torques
+   Experiment plot 1 (left): Comparison of conflicting (dashed) and non-conflicting (solid) desired trajectories, Experiment plot 2 (middle): Comparison of w. and w/o compensating for top-down disturbances through the $$\gamma_i(q, \dot{q})$$-term, Experiment plot 3 (right): Comparison of energy levels case 1: w/o feedback of forces/torques, case 2: w. feedback of forces/torques
 </div>
 
 
@@ -153,4 +153,4 @@ The effect of not considering the $$\gamma_i(q, \dot{q})$$-term in equation \ref
 
 To briefly recap, the purpose of the $$\gamma_i(q, \dot{q})$$-term is to compensate for top-down disturbances affecting lower task levels. This can nicely be seen in this experiment. While in both simulations, with and without the $$\gamma_i(q, \dot{q})$$-term, the absolute task error stays the same for the first task hierarchy level. The error then increases drastically due to top-down disturbances the further it propagates downwards in the levels, unless they are compensated for. On level two, the maximum error is just above $$0.005$$, but for level three it is already approximately $$0.7$$. Note that the error signal is periodic since we have a periodic desired trajectory.
 
-Experiment \#3 evaluates the potential energy on each level, which is shown in figure \ref{fig:energy_ext_forces}, There, the difference between case one and two gets clear. In case one without feedback of external forces, there is a coupling between each task. For example, applying a force on the second level in the time interval [0.2 ,  0.4] results in a high peak on the first level, too. While there is no effect on higher tasks in case 2. It can also be seen that for constant forces there is even no effect on lower tasks. The two little peaks on the second level between [0.2 ,  0.6] can be explained by the jumps when applying the force. This also highlights the partially (inertial) decoupling between tasks for non-constant external forces and its effects on only lower task levels. Furthermore, applying an external force results, depending on the chosen stiffness $$K$$, in a new equilibrium and with that in a permanent control deviation as long as the force is applied.
+Experiment \#3 evaluates the potential energy on each level, which is shown in figure \ref{fig:energy_ext_forces}, There, the difference between case one and two gets clear. In case one without feedback of external forces, there is a coupling between each task. For example, applying a force on the second level in the time interval $$[0.2 ,  0.4]$$ results in a high peak on the first level, too. While there is no effect on higher tasks in case 2. It can also be seen that for constant forces there is even no effect on lower tasks. The two little peaks on the second level between $$[0.2 ,  0.6]$$ can be explained by the jumps when applying the force. This also highlights the partially (inertial) decoupling between tasks for non-constant external forces and its effects on only lower task levels. Furthermore, applying an external force results, depending on the chosen stiffness $$K$$, in a new equilibrium and with that in a permanent control deviation as long as the force is applied.
