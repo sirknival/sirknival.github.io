@@ -19,7 +19,7 @@ I am a student in **Robotics and Automation** with a strong interest in control 
 
 Beyond my studies, I am actively engaged in volunteering and teamwork through the scouting movement, which has shaped my values of responsibility, collaboration, and lifelong learning.  
 
-\begin{equation}
+$$
 \Delta\text{personality} = 
 \int_{\text{Cub Scouts}}^{\text{Rovers}} 
 \begin{bmatrix}
@@ -32,4 +32,4 @@ Beyond my studies, I am actively engaged in volunteering and teamwork through th
 \text{responsibility} \\
 \text{attentiveness}
 \end{bmatrix} dt
-\end{equation}
+$$
