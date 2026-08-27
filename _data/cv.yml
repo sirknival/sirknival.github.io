@@ -3,94 +3,81 @@
   contents:
     - name: Full Name
       value: Florian Langer
-    - name: Date of Birth
-      value: 1999
+    - name: Location
+      value: Vienna, Austria
     - name: Languages
       value: German (native), English (fluent)
+    - name: LinkedIn
+      value: <a href="https://www.linkedin.com/in/langer-florian/">langer-florian</a>
 
 - title: Education
   type: time_table
   contents:
-    - title: Currently (BSc-programme) 
+    - title: MSc, Robotics and Automation
       institution: Technische Universität Wien, Vienna, Austria
-      year: 2020-now
+      year: 10.2026 - now
+      description:
+        - Focus on robotics and automation
+    - title: BSc, Electrical Engineering
+      institution: Technische Universität Wien, Vienna, Austria
+      year: 10.2020 - 06.2026
       description:
         - Focus on robotics, automation and machine vision
-        - title: Description 3.
-          contents:
-            - Sub-description 1.
-            - Sub-description 2.
-    - title: Matura 
-      institution: HTL Wien West (formerly HTL Ottakring) 
-      year: 09.2014 - 06.2019
+    - title: Matura
+      institution: HTL Wien West (formerly HTL Ottakring)
+      year: 09.2014 - 06.2020
       description:
-        - Description 1.
-        - Description 2.
+        - Electrical engineering
 
 - title: Experience
   type: time_table
   contents:
-    - title: Assistant of 
-      institution: Landesverband Wiener Pfadfinderinnen und Pfadfinder
+    - title: Assistant to the regional association
+      institution: Wiener Pfadfinderinnen und Pfadfinder
       year: 08.2022 - now
       description:
-        - Description 1.
-        - Description 2.
-        - title: Description 3.
-          contents:
-            - Sub-description 1.
-            - Sub-description 2.
-    - title: Technical drafter
+        - Full-time employee - support of the volunteer officials
+        - Public relations
+        - IT administration (MS 365, intranet, web presence, ...)
+        - First-level support for Viennese scout groups
+        - Administration of the internal training
+    - title: Technical Drafter
       institution: Kamo Elektrotechnik GmbH
-      year: 10.2021 - 07.2022
-      description:
-        - Description 1.
-        - Description 2.
+      year: 11.2021 - 07.2022
 
-    - title: Director
-      institution: Kaiser Wilhelm Institute for Physics, Berlin, Germany.
-      year: 1917-1933
-
-    - title: Professor of Theoretical Physics
-      institution: Karl-Ferdinand University, Prague, Czechoslovakia
-      year: 1911 - 1917
-      description:
-
-    - title: Associate Professor of Theoretical Physics
-      institution: University of Zurich, Zurich, Switzerland
-      year: 1909 - 1911
-
-- title: Open Source Projects
+- title: Volunteer
   type: time_table
   contents:
-    - title: <a href="https://github.com/alshedivat/al-folio">al-folio</a>
-      year: 2015-now
-      description: A beautiful, simple, clean, and responsive Jekyll theme for academics.
+    - title: Group Leader
+      institution: Pfadfindergruppe 19 Breitensee, Vienna, Austria
+      year: 08.2023 - now
+    - title: Head of department LAB 2024
+      institution: Wiener Pfadfinderinnen und Pfadfinder, Vienna, Austria
+      year: 04.2023 - 06.2024
+      description:
+        - Landesabenteuer (LAB) 2024 - Viennese scout camp with over 270 boy scouts and girl guides
+        - Public relations
+        - Finances
+        - Administration
+    - title: Scout Leader
+      institution: Pfadfindergruppe 19 Breitensee, Vienna, Austria
+      year: 10.2018 - now
+      description:
+        - Wichtel & Wölflinge
+        - Guides & Späher
 
 - title: Honors and Awards
   type: time_table
   contents:
-    - year: 1921
+    - year: 2021/2022
       items:
-        - Nobel Prize in Physics
-        - Matteucci Medal
-    - year: 2029
+        - Leistungsstipendium (merit-based scholarship), Technische Universität Wien
+    - year: 2020/2021
       items:
-        - Max Planck Medal
+        - Leistungsstipendium (merit-based scholarship), Technische Universität Wien
 
-- title: Academic Interests
-  type: nested_list
-  contents:
-    - title: Topic 1.
-      items:
-        - Description 1.
-        - Description 2.
-    - title: Topic 2.
-      items:
-        - Description 1.
-        - Description 2.
-
-- title: Other Interests
+- title: Languages
   type: list
   contents:
-    - <u>Hobbies:</u> Hobby 1, Hobby 2, etc.
+    - German (native speaker)
+    - English (fluent)
