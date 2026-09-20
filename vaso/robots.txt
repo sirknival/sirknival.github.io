@@ -1,0 +1,5 @@
+# Alles standardmäßig crawlbar
+User-agent: *
+Disallow:
+
+Sitemap: https://vaso.at/sitemap.xml
