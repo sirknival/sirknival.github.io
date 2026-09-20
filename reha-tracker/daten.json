@@ -1,0 +1,153 @@
+{
+  "unfallDatum": "2026-08-15",
+  "ort": "Nationalpark Bohinj, Slowenien",
+  "aktuellerFortschritt": null,
+
+  "finalesZiel": {
+    "name": "Marathon unter 3:00 h",
+    "zieldatum": null,
+    "beschreibung": "Der Gipfel der ganzen Route: ein Marathon in unter drei Stunden. Solange dieses Ziel nicht erreicht ist, bleibt das Gipfelbuch verschlossen.",
+    "erreicht": false,
+    "erreichtAm": null,
+    "lat": 46.3786,
+    "lon": 13.8368,
+    "gipfelbuch": []
+  },
+
+  "huetten": [
+    {
+      "id": "unfall-bohinj",
+      "name": "Basislager Bohinj",
+      "datum": "2026-08-15",
+      "typ": "unfall",
+      "fortschritt": 0,
+      "lat": 46.2790,
+      "lon": 13.8340,
+      "beschreibung": "Der Unfalltag im Nationalpark Bohinj. Umgeknickt beim Abstieg, Weber-B-Bruch am Sprunggelenk. Von hier startet die Route.",
+      "huettenbuch": [
+        { "datum": "2026-08-15", "text": "Fehltritt auf nassem Fels. Sofort klar: da stimmt etwas nicht. Abtransport ins Tal, erste Schiene." }
+      ]
+    },
+    {
+      "id": "op-termin",
+      "name": "OP & Erstversorgung",
+      "datum": "2026-08-16",
+      "typ": "op",
+      "fortschritt": 8,
+      "lat": 46.2880,
+      "lon": 13.8380,
+      "beschreibung": "Operative Versorgung des Weber-B-Bruchs mit Platte und Schrauben. Anschließend Gips und strikte Entlastung.",
+      "huettenbuch": [
+        { "datum": "2026-08-16", "text": "OP gut überstanden. Platte sitzt. Erstmal 6 Wochen Teilentlastung an Krücken." },
+        { "datum": "2026-08-18", "text": "Erste Nacht ohne starke Schmerzmittel. Fuß hochlagern, Geduld haben." }
+      ]
+    },
+    {
+      "id": "kontrolle-1",
+      "name": "Wundkontrolle",
+      "datum": "2026-08-28",
+      "typ": "arzttermin",
+      "fortschritt": 22,
+      "lat": 46.3010,
+      "lon": 13.8400,
+      "beschreibung": "Erste Kontrolle: Wunde reizlos, Fäden gezogen. Weiter Teilbelastung, aber Beweglichkeitsübungen dürfen starten.",
+      "huettenbuch": [
+        { "datum": "2026-08-28", "text": "Naht verheilt sauber. Physio-Rezept bekommen. Endlich darf ich das Gelenk vorsichtig bewegen." }
+      ]
+    },
+    {
+      "id": "physio-start",
+      "name": "Physio-Basislager",
+      "datum": "2026-09-05",
+      "typ": "reha",
+      "fortschritt": 38,
+      "lat": 46.3180,
+      "lon": 13.8385,
+      "beschreibung": "Start der Physiotherapie. Mobilisation, Lymphdrainage gegen die Schwellung, erste vorsichtige Belastungsübungen.",
+      "huettenbuch": [
+        { "datum": "2026-09-05", "text": "Beweglichkeit noch mies, aber es geht bergauf. Hausaufgaben: 3x täglich Mobilisation." },
+        { "datum": "2026-09-12", "text": "Schwellung deutlich besser. Erstes Mal wieder abrollen probiert." }
+      ]
+    },
+    {
+      "id": "kontrolle-2",
+      "name": "Röntgen-Kontrolle",
+      "datum": "2026-09-18",
+      "typ": "arzttermin",
+      "fortschritt": 50,
+      "lat": 46.3330,
+      "lon": 13.8375,
+      "beschreibung": "Röntgenkontrolle: Bruch heilt planmäßig. Freigabe zur schrittweisen Steigerung der Belastung.",
+      "huettenbuch": [
+        { "datum": "2026-09-18", "text": "Knochen heilt wie er soll. Ärztin gibt grünes Licht Richtung Vollbelastung. Motivation zurück!" }
+      ]
+    },
+    {
+      "id": "kontrolle-3",
+      "name": "Sportmedizin-Check",
+      "datum": "2026-11-15",
+      "typ": "arzttermin",
+      "fortschritt": 72,
+      "lat": 46.3600,
+      "lon": 13.8370,
+      "beschreibung": "Geplanter sportmedizinischer Check vor dem Wiedereinstieg ins Lauftraining. (Noch in der Zukunft.)",
+      "huettenbuch": []
+    }
+  ],
+
+  "zwischengipfel": [
+    {
+      "id": "schmerzfrei",
+      "name": "Schmerzfrei im Alltag",
+      "fortschritt": 30,
+      "zieldatum": "2026-09-10",
+      "erreicht": true,
+      "erreichtAm": "2026-09-08",
+      "lat": 46.3100,
+      "lon": 13.8450,
+      "beschreibung": "Alltag ohne Schmerzmittel und ohne ständiges Hochlagern."
+    },
+    {
+      "id": "vollbelastung",
+      "name": "Vollbelastung",
+      "fortschritt": 55,
+      "zieldatum": "2026-10-01",
+      "erreicht": false,
+      "erreichtAm": null,
+      "lat": 46.3420,
+      "lon": 13.8320,
+      "beschreibung": "Volles Körpergewicht auf dem Fuß, gehen ohne Krücken."
+    },
+    {
+      "id": "erste-joggingrunde",
+      "name": "Erste Joggingrunde",
+      "fortschritt": 78,
+      "zieldatum": "2026-12-01",
+      "erreicht": false,
+      "erreichtAm": null,
+      "lat": 46.3660,
+      "lon": 13.8355,
+      "beschreibung": "Die ersten lockeren 20 Minuten am Stück laufen."
+    },
+    {
+      "id": "erster-10er",
+      "name": "Erste 10 km",
+      "fortschritt": 90,
+      "zieldatum": "2027-03-01",
+      "erreicht": false,
+      "erreichtAm": null,
+      "lat": 46.3730,
+      "lon": 13.8360,
+      "beschreibung": "10 Kilometer am Stück, schmerzfrei und ohne Rückschläge danach."
+    }
+  ],
+
+  "rueckschlaege": [
+    {
+      "datum": "2026-09-01",
+      "fortschritt": 34,
+      "beschreibung": "Überlastung nach zu ehrgeizigen Übungen: Schwellung und Reizung, zwei Tage Pause verordnet.",
+      "einfluss": "mittel"
+    }
+  ]
+}

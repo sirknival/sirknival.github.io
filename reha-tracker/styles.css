@@ -1,0 +1,357 @@
+/* =============================================================================
+ *  REHA-TRACKER · VERSION 2 · TOPOGRAFISCH · PANORAMA
+ *  Reduzierter Linien-Stil (Höhenlinienkarte): Tinten-Navy + eine Akzentfarbe.
+ *  Die Landschaft ist horizontal begehbar; mehrere Ebenen bewegen sich mit
+ *  unterschiedlicher Parallax-Tiefe.
+ * ========================================================================== */
+
+:root {
+  --papier:      #f6f7f4;
+  --papier-tief: #eef0ea;
+  --navy:        #1d2b45;
+  --navy-blass:  #7a869c;
+  --navy-linie:  #b9c2d0;
+  --akzent:      #e0531f;
+  --akzent-tief: #b23f14;
+  --erreicht:    #2f7d5b;
+  --warn:        #cf3b2c;
+
+  --welt-h: 640px;         /* Höhe des Panoramas = WELT_H in app.js */
+  --radius: 8px;
+  --linie: 1px solid var(--navy-linie);
+  --font: "Segoe UI", "Helvetica Neue", system-ui, sans-serif;
+  --mono: "Consolas", "SF Mono", ui-monospace, monospace;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  font-family: var(--font);
+  color: var(--navy);
+  background-color: var(--papier);
+  line-height: 1.55;
+}
+
+/* ===========================================================================
+ *  PANORAMA
+ * ======================================================================== */
+.panorama {
+  position: relative;
+  height: 100vh;                /* füllt den Viewport – darunter steht nichts mehr */
+  min-height: 480px;
+  overflow: hidden;
+  cursor: grab;
+  touch-action: none;           /* vertikales Ziehen übernimmt JS */
+  user-select: none;
+  outline: none;
+}
+.panorama.zieht { cursor: grabbing; }
+.panorama:focus-visible { box-shadow: inset 0 0 0 3px rgba(224,83,31,.4); }
+
+/* Himmel */
+.himmel {
+  position: absolute; inset: 0;
+  background: linear-gradient(180deg, #dfe6ee 0%, #eef1ee 55%, var(--papier) 100%);
+  /* feines Kartengitter */
+  background-image:
+    linear-gradient(180deg, #dfe6ee 0%, #eef1ee 55%, var(--papier) 100%),
+    linear-gradient(rgba(29,43,69,.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(29,43,69,.05) 1px, transparent 1px);
+  background-size: 100% 100%, 30px 30px, 30px 30px;
+}
+
+.buehne { position: absolute; inset: 0; }
+
+/* Parallax-Ebenen (Hochformat): füllen die Breite, Höhe folgt dem viewBox-
+   Verhältnis. Verschoben wird nur vertikal (translateY). */
+.ebene {
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%;
+  height: auto;
+  will-change: transform;
+}
+.panorama.gleiten .ebene { transition: transform .55s cubic-bezier(.22,.61,.36,1); }
+
+/* Höhenlinien (echte DEM-Daten, ferne/mittlere Ebene) */
+.hoehenlinie { fill: none; stroke: var(--navy-linie); stroke-width: 1; }
+.hoehenlinie-index { stroke: var(--navy-blass); stroke-width: 1.7; }   /* alle 600 m dicker */
+.ebene-fern .hoehenlinie { opacity: .55; }
+
+/* Benannte Gipfel aus den Realdaten */
+.topo-gipfel-kreuz { stroke: var(--akzent); stroke-width: 2.2; }
+.topo-gipfel-label {
+  fill: var(--navy); font-family: var(--mono); font-size: 14px; font-weight: 700;
+  paint-order: stroke; stroke: var(--papier); stroke-width: 4px;
+}
+
+/* Quellenangabe der Topo-Daten */
+.topo-quelle {
+  position: absolute; left: 12px; bottom: 14px; margin: 0; z-index: 5;
+  font-family: var(--mono); font-size: .68rem; color: var(--navy-blass);
+  background: rgba(246,247,244,.72); padding: 3px 9px; border-radius: 4px;
+  pointer-events: none; max-width: 52%;
+}
+
+/* Route */
+.route { fill: none; stroke-linecap: round; stroke-linejoin: round; }
+.route-erledigt { stroke: var(--akzent); stroke-width: 4; }
+.route-offen { stroke: var(--navy-blass); stroke-width: 2; stroke-dasharray: 1 9; opacity: .9; }
+
+/* Marker */
+.marker { cursor: pointer; }
+.marker:focus { outline: none; }
+.marker:focus .huette-wand,
+.marker:focus .gipfel-form,
+.marker:focus .warn-form,
+.marker:focus .gipfel-gross { stroke: var(--akzent); stroke-width: 2.6; }
+.marker-label {
+  font-size: 13px; font-weight: 600; fill: var(--navy);
+  font-family: var(--mono);
+  paint-order: stroke; stroke: var(--papier); stroke-width: 4px;
+}
+
+.huette-wand { fill: var(--papier); stroke: var(--navy); stroke-width: 1.8; }
+.huette-dach { fill: none; stroke: var(--navy); stroke-width: 1.8; stroke-linejoin: round; }
+.huette-fuss { fill: var(--akzent); }
+.huette.ist-erreicht .huette-dach,
+.huette.ist-erreicht .huette-wand { stroke: var(--akzent); }
+.huette.ist-offen { opacity: .5; }
+
+.gipfel-form { fill: none; stroke: var(--navy); stroke-width: 1.8; stroke-linejoin: round; }
+.zwischengipfel.ist-erreicht .gipfel-form { fill: rgba(47,125,91,.15); stroke: var(--erreicht); }
+.zwischengipfel.ist-offen { opacity: .55; }
+.fahne-mast { stroke: var(--erreicht); stroke-width: 1.6; }
+.fahne-tuch { fill: var(--erreicht); }
+
+.warn-form { fill: var(--papier); stroke: var(--warn); stroke-width: 2; stroke-linejoin: round; }
+.warn-zeichen { fill: var(--warn); font-weight: 800; font-size: 15px; font-family: var(--mono); }
+
+.gipfel-gross { fill: none; stroke: var(--navy); stroke-width: 2.4; stroke-linejoin: round; }
+.gipfel-schnee { fill: none; stroke: var(--navy); stroke-width: 1.6; }
+.finalgipfel.ist-erreicht .gipfel-gross { stroke: var(--akzent); fill: rgba(224,83,31,.1); }
+.finalgipfel .fahne-mast { stroke: var(--akzent); }
+.finalgipfel .fahne-tuch { fill: var(--akzent); }
+.gipfel-label { font-size: 15px; font-weight: 700; }
+
+.figur-kopf { fill: var(--navy); }
+.figur-koerper { fill: var(--papier); stroke: var(--akzent); stroke-width: 2; }
+.figur-stock { stroke: var(--navy); stroke-width: 2; stroke-linecap: round; }
+.positions-puls {
+  fill: none; stroke: var(--akzent); stroke-width: 1.6; opacity: .6;
+  animation: puls 2.4s ease-in-out infinite;
+  /* transform-box: fill-box sorgt dafür, dass sich der Puls um SEIN eigenes
+     Zentrum skaliert (nicht um das viewBox-Zentrum – die klassische SVG-Falle). */
+  transform-box: fill-box; transform-origin: center;
+}
+@keyframes puls { 0% { transform: scale(.5); opacity: .8; } 100% { transform: scale(1.3); opacity: 0; } }
+
+/* ---------- TAGE-LEISTE (oben, schlank) ----------
+   Als horizontale Leiste statt Karte, damit sie die vertikale Route (die je
+   nach echten Koordinaten irgendwo liegen kann) nicht verdeckt. */
+.counter {
+  position: absolute; top: 0; left: 0; right: 54px;   /* Platz für die Minimap */
+  display: flex; align-items: center; gap: 14px; flex-wrap: wrap;
+  padding: 8px 18px;
+  background: rgba(246,247,244,.9);
+  backdrop-filter: blur(4px);
+  border-bottom: 1.5px solid var(--navy);
+  z-index: 6;
+}
+.counter-zahl {
+  font-size: 2.2rem; font-weight: 800; line-height: 1; color: var(--navy);
+  font-variant-numeric: tabular-nums;
+}
+.counter-block { display: flex; flex-direction: column; line-height: 1.15; }
+.counter-label { font-weight: 700; font-size: .9rem; }
+.counter-sub { color: var(--navy-blass); font-family: var(--mono); font-size: .76rem; }
+.counter-meta { color: var(--navy-blass); font-size: .78rem; margin-left: auto; }
+.counter-ziel { font-size: .9rem; }
+.counter-ziel strong { color: var(--akzent-tief); }
+.counter-btn {
+  font-family: var(--mono); font-size: .8rem; font-weight: 700;
+  color: #fff; background: var(--akzent); border: none;
+  border-radius: 999px; padding: 8px 14px; cursor: pointer;
+  transition: background .15s; white-space: nowrap;
+}
+.counter-btn:hover { background: var(--akzent-tief); }
+
+/* ---------- STEUERUNG ---------- */
+.steuerung {
+  position: absolute; top: 50%; right: 68px; transform: translateY(-50%);
+  display: flex; flex-direction: column; gap: 8px; z-index: 5;
+}
+.steuerung button {
+  font-family: var(--mono); font-size: .82rem; font-weight: 600;
+  color: var(--navy); background: rgba(246,247,244,.9);
+  border: 1.5px solid var(--navy); border-radius: 999px;
+  padding: 7px 14px; cursor: pointer; transition: background .15s, color .15s;
+}
+.steuerung button:hover { background: var(--navy); color: var(--papier); }
+#btn-jetzt { border-color: var(--akzent); color: var(--akzent-tief); }
+#btn-jetzt:hover { background: var(--akzent); color: #fff; }
+
+/* ---------- HINWEIS ---------- */
+.hinweis {
+  position: absolute; left: calc(50% - 27px); bottom: 16px; transform: translateX(-50%);
+  margin: 0; padding: 6px 14px; z-index: 5; max-width: 80vw;
+  font-family: var(--mono); font-size: .8rem; color: var(--navy-blass);
+  background: rgba(246,247,244,.82); border-radius: 999px;
+  pointer-events: none; text-align: center;
+}
+
+/* ---------- MINIMAP (vertikal, rechter Rand) ---------- */
+.minimap {
+  position: absolute; top: 0; bottom: 0; right: 0; width: 54px;
+  background: rgba(29,43,69,.06);
+  border-left: 1px solid var(--navy-linie);
+  cursor: pointer; z-index: 5; touch-action: none;
+}
+.minimap-svg { width: 100%; height: 100%; display: block; }
+.mini-erledigt { stroke: var(--akzent); stroke-width: 9; }
+.mini-offen { stroke: var(--navy-blass); stroke-width: 5; stroke-dasharray: 4 8; }
+.mini-huette { fill: var(--navy); }
+.mini-gipfel { fill: none; stroke: var(--navy); stroke-width: 3; }
+.mini-gipfel.ist-erreicht { fill: var(--erreicht); stroke: var(--erreicht); }
+.mini-final { fill: var(--akzent); }
+.mini-figur { fill: var(--akzent); stroke: var(--papier); stroke-width: 3; }
+.mini-fenster { fill: rgba(224,83,31,.16); stroke: var(--akzent); stroke-width: 3; }
+
+/* ===========================================================================
+ *  OVERLAY „Etappen & Gipfel" (Drawer von rechts)
+ * ======================================================================== */
+.uebersicht {
+  position: fixed; inset: 0; z-index: 60;
+  pointer-events: none;               /* geschlossen: Klicks gehen durch */
+}
+.uebersicht.offen { pointer-events: auto; }
+
+.uebersicht-backdrop {
+  position: absolute; inset: 0;
+  background: rgba(29,43,69,.5);
+  opacity: 0; transition: opacity .3s ease;
+}
+.uebersicht.offen .uebersicht-backdrop { opacity: 1; }
+
+.uebersicht-panel {
+  position: absolute; top: 0; right: 0; height: 100%;
+  width: min(460px, 92vw);
+  background: var(--papier);
+  border-left: 2px solid var(--navy);
+  box-shadow: -8px 0 30px rgba(29,43,69,.22);
+  transform: translateX(100%);
+  transition: transform .35s cubic-bezier(.22,.61,.36,1);
+  overflow-y: auto;
+  padding: 16px 24px 40px;
+}
+.uebersicht.offen .uebersicht-panel { transform: translateX(0); }
+
+.uebersicht-kopf {
+  position: sticky; top: 0; z-index: 1;
+  display: flex; align-items: center; justify-content: space-between;
+  background: var(--papier); padding: 8px 0 10px; margin-bottom: 10px;
+  border-bottom: 2px solid var(--navy);
+}
+.uebersicht-titel { margin: 0; font-size: 1.15rem; text-transform: uppercase; letter-spacing: .06em; }
+.uebersicht-schliessen {
+  border: none; background: none; font-size: 1.9rem; line-height: 1;
+  cursor: pointer; color: var(--navy-blass);
+}
+.uebersicht-fuss { margin-top: 24px; color: var(--navy-blass); font-size: .78rem; text-align: center; }
+
+/* Sektionen im Panel */
+.sektion { margin: 0 0 28px; }
+.sektion h3 {
+  font-size: 1.15rem; margin: 0 0 4px;
+  text-transform: uppercase; letter-spacing: .05em;
+  border-bottom: 2px solid var(--navy-linie); display: inline-block; padding-bottom: 3px;
+}
+.sektion-intro { color: var(--navy-blass); margin: 6px 0 14px; font-size: .92rem; }
+
+.ziel-liste { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; }
+.ziel-eintrag {
+  display: flex; gap: 14px; align-items: flex-start;
+  background: var(--papier); border: var(--linie);
+  border-left: 4px solid var(--navy-blass); border-radius: var(--radius); padding: 14px 18px;
+}
+.ziel-eintrag.ist-erreicht { border-left-color: var(--erreicht); }
+.ziel-icon { font-size: 1.2rem; font-weight: 800; color: var(--navy-blass); line-height: 1.5; font-family: var(--mono); }
+.ist-erreicht .ziel-icon { color: var(--erreicht); }
+.ziel-titel { display: block; font-weight: 700; font-size: 1.05rem; }
+.ziel-meta { display: block; color: var(--navy-blass); font-size: .85rem; font-family: var(--mono); }
+.ziel-beschreibung { display: block; margin-top: 4px; }
+
+#gipfelbuch .gipfelbuch-gesperrt {
+  background: var(--papier); border: 1.5px dashed var(--navy-blass);
+  border-radius: var(--radius); padding: 32px; text-align: center; color: var(--navy-blass);
+}
+.schloss { font-size: 2.2rem; display: block; margin-bottom: 8px; }
+.gipfel-eintrag {
+  background: var(--papier); border: var(--linie); border-left: 4px solid var(--akzent);
+  border-radius: var(--radius); padding: 14px 18px; margin-bottom: 12px;
+}
+
+/* ---------- MODAL ---------- */
+.modal {
+  position: fixed; inset: 0; background: rgba(29,43,69,.55);
+  display: none; align-items: center; justify-content: center; padding: 20px; z-index: 50;
+}
+.modal.offen { display: flex; }
+.modal-box {
+  background: var(--papier); border: 1.5px solid var(--navy); border-radius: var(--radius);
+  max-width: 520px; width: 100%; max-height: 85vh; overflow: auto; padding: 28px; position: relative;
+}
+.modal-schliessen {
+  position: absolute; top: 12px; right: 14px; border: none; background: none;
+  font-size: 1.8rem; line-height: 1; cursor: pointer; color: var(--navy-blass);
+}
+.modal-kopf { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+.modal-kopf h3 { margin: 0; font-size: 1.35rem; }
+.badge {
+  background: none; color: var(--akzent-tief); border: 1.5px solid var(--akzent);
+  font-size: .72rem; font-weight: 700; padding: 2px 9px; border-radius: 4px;
+  text-transform: uppercase; letter-spacing: .05em; font-family: var(--mono);
+}
+.modal-datum { color: var(--navy-blass); margin: 4px 0 10px; font-weight: 600; font-family: var(--mono); }
+.modal-beschreibung { margin: 0 0 16px; }
+.buch-titel {
+  margin: 18px 0 10px; font-size: .9rem; text-transform: uppercase; letter-spacing: .1em;
+  color: var(--akzent-tief); font-family: var(--mono);
+}
+.huettenbuch { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; }
+.huettenbuch li { background: var(--papier-tief); border-left: 3px solid var(--akzent); border-radius: 4px; padding: 10px 14px; }
+.buch-datum { display: block; font-size: .78rem; color: var(--navy-blass); font-weight: 700; font-family: var(--mono); }
+.buch-text { display: block; margin-top: 2px; }
+.buch-leer { color: var(--navy-blass); font-style: italic; }
+
+/* ---------- FUSS ---------- */
+.fuss { text-align: center; padding: 24px; color: var(--navy-blass); font-size: .82rem; }
+code { background: var(--papier-tief); padding: 1px 6px; border-radius: 4px; font-family: var(--mono); }
+
+/* ---------- LADEFEHLER ---------- */
+.ladefehler {
+  position: fixed; inset: 0; background: rgba(29,43,69,.8);
+  display: flex; align-items: center; justify-content: center; padding: 20px; z-index: 100;
+}
+.ladefehler[hidden] { display: none; }
+.ladefehler-box { background: var(--papier); border: 1.5px solid var(--navy); border-radius: var(--radius); padding: 28px; max-width: 480px; }
+.ladefehler-box pre { background: var(--navy); color: var(--papier); padding: 12px 14px; border-radius: 6px; overflow: auto; font-family: var(--mono); }
+.ladefehler-detail { color: var(--navy-blass); font-size: .8rem; word-break: break-all; }
+
+/* ===========================================================================
+ *  RESPONSIVE
+ * ======================================================================== */
+@media (max-width: 720px) {
+  .counter { right: 42px; padding: 6px 12px; gap: 10px; }
+  .counter-zahl { font-size: 1.9rem; }
+  .counter-meta { display: none; }
+  .minimap { width: 42px; }
+  .steuerung { right: 52px; }
+  .steuerung button { font-size: .75rem; padding: 6px 11px; }
+  .hinweis { display: none; }
+  /* Karte ist auf Handys kleiner skaliert -> Labels vergrößern. */
+  .marker-label { font-size: 22px; }
+  .gipfel-label { font-size: 24px; }
+  .topo-gipfel-label { font-size: 20px; }
+}

@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Reha-Route · Topografisch</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+
+<!-- data-stil steuert die versionsspezifische Kulisse in app.js -->
+<body data-stil="topografisch">
+
+  <!-- ===================================================================
+       PANORAMA: begehbare Landschaft mit Weg, Counter-Overlay & Minimap
+       =================================================================== -->
+  <header class="panorama" id="panorama" tabindex="0"
+          aria-label="Panorama der Genesungsroute – horizontal erkundbar">
+
+    <div class="himmel"></div>
+
+    <!-- Parallax-Ebenen werden von app.js hier eingefügt -->
+    <div class="buehne" id="buehne"></div>
+
+    <!-- Immer sichtbare Tage-Leiste oben (verdeckt die vertikale Route nicht) -->
+    <div class="counter">
+      <span class="counter-zahl" id="timer-tage">–</span>
+      <span class="counter-block">
+        <span class="counter-label">Tage seit dem Unfall</span>
+        <span class="counter-sub" id="timer-wochen">–</span>
+      </span>
+      <span class="counter-meta">
+        <span id="unfall-datum">—</span> · <span id="unfall-ort">—</span>
+      </span>
+      <span class="counter-ziel">Ziel: <strong id="ziel-name-counter">—</strong></span>
+      <button class="counter-btn" id="btn-uebersicht" aria-haspopup="dialog" aria-controls="uebersicht">
+        📖 Etappen &amp; Gipfel
+      </button>
+    </div>
+
+    <!-- Steuerung (vertikal: Gipfel hoch / Tal runter) -->
+    <div class="steuerung">
+      <button id="btn-zukunft" title="Richtung Gipfel (Zukunft)" aria-label="Zum Gipfel">▲ Gipfel</button>
+      <button id="btn-jetzt" title="Zur aktuellen Position" aria-label="Zur aktuellen Position">● Jetzt</button>
+      <button id="btn-vergangenheit" title="Richtung Tal (Vergangenheit)" aria-label="Zum Tal">▼ Tal</button>
+    </div>
+
+    <p class="hinweis">↕ Ziehen, Pfeiltasten oder Minimap: vom Tal hinauf zum Gipfel</p>
+
+    <!-- Minimap / Gesamtübersicht mit aktuellem Ausschnitt -->
+    <div class="minimap" id="minimap" role="slider" aria-label="Position auf der Route"></div>
+  </header>
+
+  <!-- ===================================================================
+       OVERLAY: Etappen (Zwischengipfel) & Gipfelbuch
+       Standardmäßig unsichtbar; öffnet über den 📖-Button an der Hero-Anzeige.
+       =================================================================== -->
+  <div class="uebersicht" id="uebersicht" aria-hidden="true" role="dialog"
+       aria-modal="true" aria-label="Etappen und Gipfel">
+    <div class="uebersicht-backdrop" id="uebersicht-backdrop"></div>
+
+    <aside class="uebersicht-panel">
+      <div class="uebersicht-kopf">
+        <h2 class="uebersicht-titel">Etappen &amp; Gipfel</h2>
+        <button class="uebersicht-schliessen" id="uebersicht-schliessen" aria-label="Schließen">×</button>
+      </div>
+
+      <!-- ÜBERSICHT ZWISCHENZIELE -->
+      <section class="sektion" id="zwischenziele">
+        <h3>Zwischengipfel</h3>
+        <p class="sektion-intro">Etappenziele auf dem Weg zum Marathon – erreicht oder noch offen.</p>
+        <ul class="ziel-liste" id="zwischenziele-liste"></ul>
+      </section>
+
+      <!-- ZIELBEREICH / GIPFELBUCH -->
+      <section class="sektion" id="gipfelbuch">
+        <h3>Gipfelbuch</h3>
+        <p class="sektion-intro" id="ziel-beschreibung"></p>
+        <div class="gipfelbuch-gesperrt" id="gipfelbuch-gesperrt">
+          <span class="schloss">🔒</span>
+          <p>Das Gipfelbuch öffnet sich erst, wenn der finale Gipfel erreicht ist.</p>
+        </div>
+        <div class="gipfelbuch-inhalt" id="gipfelbuch-inhalt" hidden></div>
+      </section>
+
+      <p class="uebersicht-fuss">Daten aus <code>daten.json</code> · siehe <code>README.md</code>.</p>
+    </aside>
+  </div>
+
+  <!-- DETAIL-PANEL (MODAL) -->
+  <div class="modal" id="modal" aria-hidden="true" role="dialog" aria-modal="true">
+    <div class="modal-box">
+      <button class="modal-schliessen" id="modal-schliessen" aria-label="Schließen">×</button>
+      <div class="modal-inhalt" id="modal-inhalt"></div>
+    </div>
+  </div>
+
+  <!-- Hinweis-Overlay, falls daten.json per file:// nicht geladen werden kann -->
+  <div class="ladefehler" id="ladefehler" hidden>
+    <div class="ladefehler-box">
+      <h3>daten.json konnte nicht geladen werden</h3>
+      <p>Beim direkten Öffnen per <code>file://</code> blockieren Browser das Laden lokaler Dateien.
+         Starte einen kleinen lokalen Server im Ordner:</p>
+      <pre>python -m http.server 8000</pre>
+      <p>… und öffne dann <code>http://localhost:8000</code>.
+         Auf GitHub Pages / Netlify funktioniert es direkt ohne Server.</p>
+      <p class="ladefehler-detail" id="ladefehler-detail"></p>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>

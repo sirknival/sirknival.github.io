@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Koordinaten-Picker · Triglav</title>
+  <style>
+    /* ===================================================================
+       Koordinaten-Picker: klickt auf der echten Triglav-Karte Koordinaten,
+       die direkt in daten.json (lat/lon) übernommen werden können.
+       Rein statisch – lädt topo-triglav.json (Höhenlinien + Bounding-Box)
+       und daten.json (bestehende Marker als Referenz).
+       =================================================================== */
+    :root {
+      --papier:#f6f7f4; --papier-tief:#eef0ea; --navy:#1d2b45; --navy-blass:#7a869c;
+      --navy-linie:#b9c2d0; --akzent:#e0531f; --akzent-tief:#b23f14; --erreicht:#2f7d5b;
+      --mono:"Consolas","SF Mono",ui-monospace,monospace;
+      --font:"Segoe UI","Helvetica Neue",system-ui,sans-serif;
+    }
+    * { box-sizing:border-box; }
+    html,body { margin:0; height:100%; }
+    body { font-family:var(--font); color:var(--navy); background:var(--papier); }
+
+    .app { display:flex; height:100vh; }
+
+    /* Karte */
+    .karte-wrap {
+      flex:1; overflow:auto; position:relative;
+      background:
+        linear-gradient(#dfe6ee,#eef1ee 55%,var(--papier)),
+        linear-gradient(rgba(29,43,69,.05) 1px,transparent 1px),
+        linear-gradient(90deg,rgba(29,43,69,.05) 1px,transparent 1px);
+      background-size:100% 100%,28px 28px,28px 28px;
+    }
+    /* Karte füllt die Breite, ist hoch (Hochformat) -> vertikal scrollen. */
+    #svg { width:calc(var(--zoom,1) * 100%); height:auto; display:block; cursor:crosshair; }
+
+    .hl { fill:none; stroke:var(--navy-linie); stroke-width:1.3; }
+    .hl-index { stroke:var(--navy-blass); stroke-width:2.2; }
+
+    .gipfel-kreuz { stroke:var(--erreicht); stroke-width:2.4; }
+    .gipfel-label { fill:var(--navy); font-family:var(--mono); font-size:13px; font-weight:700;
+      paint-order:stroke; stroke:var(--papier); stroke-width:4px; }
+
+    .ref-pin { fill:var(--navy); opacity:.55; }
+    .ref-label { fill:var(--navy); opacity:.7; font-family:var(--mono); font-size:12px;
+      paint-order:stroke; stroke:var(--papier); stroke-width:3px; }
+    .ref-aus .ref-pin, .ref-aus .ref-label { display:none; }
+
+    .pick-pin { fill:var(--akzent); stroke:#fff; stroke-width:2; }
+    .pick-num { fill:#fff; font-family:var(--mono); font-size:13px; font-weight:800; text-anchor:middle; }
+
+    .fadenkreuz line { stroke:var(--akzent); stroke-width:1.2; opacity:.8; }
+
+    /* Seitenleiste */
+    .seite {
+      width:340px; flex-shrink:0; background:var(--papier);
+      border-left:2px solid var(--navy); padding:18px 20px; overflow-y:auto;
+    }
+    h1 { font-size:1.25rem; margin:0 0 2px; }
+    .sub { color:var(--navy-blass); font-size:.82rem; margin:0 0 14px; }
+    .karte-hint { font-size:.82rem; color:var(--navy-blass); margin:0 0 12px; }
+
+    .live {
+      font-family:var(--mono); font-size:.9rem; background:var(--papier-tief);
+      border:1px solid var(--navy-linie); border-radius:8px; padding:10px 12px; margin-bottom:14px;
+    }
+    .live b { color:var(--akzent-tief); }
+
+    .ctrl { display:flex; flex-direction:column; gap:10px; margin-bottom:16px; }
+    .ctrl label { font-size:.85rem; display:flex; align-items:center; gap:8px; }
+    .ctrl input[type=range] { flex:1; accent-color:var(--akzent); }
+
+    .picked { display:flex; flex-direction:column; gap:10px; margin-bottom:14px; }
+    .p-item {
+      border:1px solid var(--navy-linie); border-left:4px solid var(--akzent);
+      border-radius:8px; padding:10px 12px; background:var(--papier-tief);
+    }
+    .p-kopf { display:flex; align-items:center; gap:8px; margin-bottom:6px; }
+    .p-num { width:22px; height:22px; border-radius:50%; background:var(--akzent); color:#fff;
+      font-family:var(--mono); font-weight:800; font-size:.8rem; display:flex; align-items:center; justify-content:center; flex-shrink:0; }
+    .p-item input.label { flex:1; min-width:0; border:1px solid var(--navy-linie); border-radius:6px;
+      padding:4px 8px; font-family:var(--font); font-size:.85rem; }
+    .p-coord { font-family:var(--mono); font-size:.82rem; color:var(--navy); margin:4px 0 6px; user-select:all; }
+    .p-actions { display:flex; gap:8px; }
+    .p-actions button { font-size:.75rem; }
+
+    button {
+      font-family:var(--mono); font-weight:700; cursor:pointer;
+      border:1.5px solid var(--navy); background:var(--papier); color:var(--navy);
+      border-radius:999px; padding:7px 12px; transition:background .15s,color .15s;
+    }
+    button:hover { background:var(--navy); color:var(--papier); }
+    button.akzent { border-color:var(--akzent); background:var(--akzent); color:#fff; }
+    button.akzent:hover { background:var(--akzent-tief); }
+    button.mini { padding:5px 10px; border-radius:6px; }
+
+    .leer { color:var(--navy-blass); font-style:italic; font-size:.85rem; }
+    .status { margin-top:10px; font-size:.8rem; color:var(--erreicht); min-height:1.2em; }
+    .fehler { color:var(--akzent-tief); }
+    code { background:var(--papier-tief); padding:1px 5px; border-radius:4px; font-family:var(--mono); }
+
+    @media (max-width:760px){
+      .app { flex-direction:column; }
+      .karte-wrap { height:52vh; flex:none; }
+      .seite { width:auto; border-left:none; border-top:2px solid var(--navy); }
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <div class="karte-wrap" id="karteWrap">
+      <svg id="svg" preserveAspectRatio="xMidYMid meet" aria-label="Triglav-Karte zum Koordinaten-Picken"></svg>
+    </div>
+
+    <aside class="seite">
+      <h1>Koordinaten-Picker</h1>
+      <p class="sub" id="quelle">Triglav-Nationalpark</p>
+      <p class="karte-hint">Auf die Karte klicken setzt einen Punkt. Die lat/lon-Werte
+        kannst du direkt in <code>daten.json</code> übernehmen.</p>
+
+      <div class="live">
+        Cursor: <b id="liveLat">–</b>, <b id="liveLon">–</b>
+      </div>
+
+      <div class="ctrl">
+        <label>Zoom <input type="range" id="zoom" min="1" max="6" step="0.1" value="1"></label>
+        <label><input type="checkbox" id="refToggle" checked> Bestehende Marker anzeigen</label>
+      </div>
+
+      <div class="picked" id="pickedList"><p class="leer">Noch keine Punkte gepickt.</p></div>
+
+      <div style="display:flex; gap:8px; flex-wrap:wrap;">
+        <button class="akzent" id="copyAll">Alle als JSON kopieren</button>
+        <button id="clearAll">Leeren</button>
+      </div>
+      <div class="status" id="status"></div>
+    </aside>
+  </div>
+
+  <script>
+  'use strict';
+
+  const svg = document.getElementById('svg');
+  const SVGNS = 'http://www.w3.org/2000/svg';
+  const el = (t, a = {}) => { const n = document.createElementNS(SVGNS, t); for (const k in a) n.setAttribute(k, a[k]); return n; };
+
+  let BB = null;                 // Bounding-Box {latMin,latMax,lonMin,lonMax}
+  let WELT = { w: 640, h: 2600 }; // Weltmaße (Fallback, falls nicht in JSON)
+  let punkte = [];               // gepickte Punkte {x,y,lat,lon,label}
+  let fadenkreuz = null;
+
+  // Welt-Koordinate -> Geo (inverse Abbildung der Bounding-Box).
+  function toGeo(x, y) {
+    return {
+      lat: BB.latMax - (y / WELT.h) * (BB.latMax - BB.latMin),
+      lon: BB.lonMin + (x / WELT.w) * (BB.lonMax - BB.lonMin),
+    };
+  }
+
+  function status(msg, fehler = false) {
+    const s = document.getElementById('status');
+    s.textContent = msg; s.className = 'status' + (fehler ? ' fehler' : '');
+    if (msg && !fehler) setTimeout(() => { if (s.textContent === msg) s.textContent = ''; }, 2500);
+  }
+
+  // Klickpunkt (Bildschirm) -> SVG-/Weltkoordinaten, unabhängig von Zoom/Scroll.
+  function svgKoord(ev) {
+    const p = svg.createSVGPoint();
+    p.x = ev.clientX; p.y = ev.clientY;
+    return p.matrixTransform(svg.getScreenCTM().inverse());
+  }
+
+  async function lade() {
+    let topo, daten;
+    try {
+      topo = await (await fetch('topo-triglav.json', { cache: 'no-store' })).json();
+    } catch (e) {
+      status('topo-triglav.json nicht ladbar – bitte über einen lokalen Server öffnen (python -m http.server).', true);
+      return;
+    }
+    try { daten = await (await fetch('daten.json', { cache: 'no-store' })).json(); } catch (e) { daten = null; }
+
+    BB = topo.bbox;
+    if (topo.welt) WELT = topo.welt;
+    svg.setAttribute('viewBox', `0 0 ${WELT.w} ${WELT.h}`);
+    document.getElementById('quelle').textContent = topo.quelle || 'Triglav-Nationalpark';
+
+    zeichneKarte(topo);
+    if (daten) zeichneReferenz(daten);
+    fadenkreuz = baueFadenkreuz();
+    svg.appendChild(fadenkreuz);
+  }
+
+  // Höhenlinien + benannte Gipfel.
+  function zeichneKarte(topo) {
+    const alle = [...(topo.ebenen?.fern ?? []), ...(topo.ebenen?.mittel ?? [])];
+    for (const l of alle) svg.appendChild(el('path', { class: 'hl ' + (l.index ? 'hl-index' : ''), d: l.d }));
+    for (const g of topo.gipfel ?? []) {
+      const grp = el('g', { transform: `translate(${g.x},${g.y})` });
+      grp.appendChild(el('path', { class: 'gipfel-kreuz', d: 'M-6 0 L6 0 M0 -6 L0 6' }));
+      const t = el('text', { class: 'gipfel-label', x: 9, y: 4 }); t.textContent = `${g.name} ${g.hoehe} m`;
+      grp.appendChild(t); svg.appendChild(grp);
+    }
+  }
+
+  // Bestehende Marker aus daten.json (nur die mit lat/lon) als Referenz.
+  function geoToWelt(lat, lon) {
+    return { x: (lon - BB.lonMin) / (BB.lonMax - BB.lonMin) * WELT.w, y: (BB.latMax - lat) / (BB.latMax - BB.latMin) * WELT.h };
+  }
+  function zeichneReferenz(daten) {
+    const grp = el('g', { id: 'refGrp' });
+    const items = [];
+    for (const h of daten.huetten ?? []) items.push(h);
+    for (const g of daten.zwischengipfel ?? []) items.push(g);
+    if (daten.finalesZiel) items.push(daten.finalesZiel);
+    for (const it of items) {
+      if (it.lat == null || it.lon == null) continue;
+      const w = geoToWelt(it.lat, it.lon);
+      grp.appendChild(el('circle', { class: 'ref-pin', cx: w.x, cy: w.y, r: 6 }));
+      const t = el('text', { class: 'ref-label', x: w.x + 10, y: w.y + 4 }); t.textContent = it.name;
+      grp.appendChild(t);
+    }
+    svg.appendChild(grp);
+  }
+
+  function baueFadenkreuz() {
+    const g = el('g', { class: 'fadenkreuz', visibility: 'hidden' });
+    g.appendChild(el('line', { id: 'fkH', x1: 0, y1: 0, x2: WELT.w, y2: 0 }));
+    g.appendChild(el('line', { id: 'fkV', x1: 0, y1: 0, x2: 0, y2: WELT.h }));
+    return g;
+  }
+
+  // Gepickte Punkte zeichnen.
+  function zeichnePunkte() {
+    document.getElementById('pinGrp')?.remove();
+    const grp = el('g', { id: 'pinGrp' });
+    punkte.forEach((p, i) => {
+      grp.appendChild(el('circle', { class: 'pick-pin', cx: p.x, cy: p.y, r: 11 }));
+      const t = el('text', { class: 'pick-num', x: p.x, y: p.y + 4 }); t.textContent = i + 1;
+      grp.appendChild(t);
+    });
+    svg.appendChild(grp);   // über allem
+    if (fadenkreuz) svg.appendChild(fadenkreuz);
+  }
+
+  // Seitenliste der Punkte.
+  function zeichneListe() {
+    const box = document.getElementById('pickedList');
+    box.innerHTML = '';
+    if (!punkte.length) { box.innerHTML = '<p class="leer">Noch keine Punkte gepickt.</p>'; return; }
+    punkte.forEach((p, i) => {
+      const item = document.createElement('div'); item.className = 'p-item';
+      const kopf = document.createElement('div'); kopf.className = 'p-kopf';
+      const num = document.createElement('span'); num.className = 'p-num'; num.textContent = i + 1;
+      const inp = document.createElement('input'); inp.className = 'label'; inp.value = p.label;
+      inp.placeholder = 'Bezeichnung'; inp.addEventListener('input', () => p.label = inp.value);
+      kopf.append(num, inp);
+      const coord = document.createElement('div'); coord.className = 'p-coord';
+      coord.textContent = `"lat": ${p.lat.toFixed(5)}, "lon": ${p.lon.toFixed(5)}`;
+      const act = document.createElement('div'); act.className = 'p-actions';
+      const bCopy = document.createElement('button'); bCopy.className = 'mini'; bCopy.textContent = 'lat/lon kopieren';
+      bCopy.addEventListener('click', () => kopiere(snippet(p), bCopy));
+      const bDel = document.createElement('button'); bDel.className = 'mini'; bDel.textContent = 'Entfernen';
+      bDel.addEventListener('click', () => { punkte.splice(i, 1); render(); });
+      act.append(bCopy, bDel);
+      item.append(kopf, coord, act); box.appendChild(item);
+    });
+  }
+
+  function snippet(p) { return `"lat": ${p.lat.toFixed(5)},\n"lon": ${p.lon.toFixed(5)}`; }
+
+  function kopiere(text, btn) {
+    navigator.clipboard.writeText(text).then(() => {
+      status('In die Zwischenablage kopiert.');
+      if (btn) { const alt = btn.textContent; btn.textContent = '✓ kopiert'; setTimeout(() => btn.textContent = alt, 1200); }
+    }).catch(() => status('Kopieren fehlgeschlagen – Text manuell markieren.', true));
+  }
+
+  function render() { zeichnePunkte(); zeichneListe(); }
+
+  // --- Interaktion ---
+  svg.addEventListener('click', ev => {
+    if (!BB) return;
+    const l = svgKoord(ev);
+    const g = toGeo(l.x, l.y);
+    punkte.push({ x: l.x, y: l.y, lat: g.lat, lon: g.lon, label: 'Punkt ' + (punkte.length + 1) });
+    render();
+  });
+
+  svg.addEventListener('mousemove', ev => {
+    if (!BB) return;
+    const l = svgKoord(ev);
+    const g = toGeo(l.x, l.y);
+    document.getElementById('liveLat').textContent = g.lat.toFixed(5);
+    document.getElementById('liveLon').textContent = g.lon.toFixed(5);
+    if (fadenkreuz) {
+      fadenkreuz.setAttribute('visibility', 'visible');
+      fadenkreuz.querySelector('#fkH').setAttribute('transform', `translate(0,${l.y})`);
+      fadenkreuz.querySelector('#fkV').setAttribute('transform', `translate(${l.x},0)`);
+    }
+  });
+  svg.addEventListener('mouseleave', () => { if (fadenkreuz) fadenkreuz.setAttribute('visibility', 'hidden'); });
+
+  document.getElementById('zoom').addEventListener('input', e => {
+    document.getElementById('svg').style.setProperty('--zoom', e.target.value);
+    svg.style.setProperty('--zoom', e.target.value);
+  });
+  document.getElementById('refToggle').addEventListener('change', e => {
+    svg.classList.toggle('ref-aus', !e.target.checked);
+  });
+  document.getElementById('copyAll').addEventListener('click', () => {
+    if (!punkte.length) return status('Noch nichts zu kopieren.', true);
+    const text = punkte.map(p => `// ${p.label}\n${snippet(p)}`).join('\n\n');
+    kopiere(text);
+  });
+  document.getElementById('clearAll').addEventListener('click', () => { punkte = []; render(); });
+
+  lade();
+  </script>
+</body>
+</html>
